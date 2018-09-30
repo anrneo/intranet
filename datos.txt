@@ -1,0 +1,24 @@
+DB_HOST=sql139.main-hosting.eu
+DB_PORT=3306
+DB_DATABASE=u617326450_pqrsf
+DB_USERNAME=u617326450_sumi
+DB_PASSWORD=Ne505050*
+
+server
+db=intranet
+t1OEAQHzU8hoGUUK = intranet
+1lipCIJVrnD7m10S = root
+
+php artisan cache:clear
+php artisan config:cache
+php artisan route:clear
+php artisan view:clear
+cache:clear
+      cache:forget
+      cache:table
+
+composer install --optimize-autoloader --no-dev
+
+php artisan make:migration create_users_table --create=users
+
+php artisan make:migration add_votes_to_users_table --table=users
