@@ -9,20 +9,52 @@
     </div>
     <br>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+      google.charts.load('current', {packages: ['corechart', 'bar']});
+google.charts.setOnLoadCallback(drawBasic);
+var app1 = @json($asignado);
+array1=[['City', 'Pendientes']]
+app1.forEach(element => {
+  array1.push([element.area, element.cant])
+});
+console.log(array1);
 
-    
+
+      
+function drawBasic() {
+
+      var data = google.visualization.arrayToDataTable(array1);
+
+      var options = {
+        title: 'Cantidad de Requerimientos Pendientes',
+        chartArea: {width: '50%'},
+        hAxis: {
+          title: 'Cantidad',
+          minValue: 0
+        },
+        vAxis: {
+          title: 'Area'
+        }
+      };
+
+      var chart = new google.visualization.BarChart(document.getElementById('chart_divserie'));
+
+      chart.draw(data, options);
+    }
+    </script>
+
+    <div id="chart_divserie" style="width: 1200px; height: 500px"></div>
+
       <script type='text/javascript'>
       var app = @json($reports);
-      console.log(app[0]);
       array=[['Element', 'Días', { role: 'style' }]]
       for (let i = 0; i < app.length; i++) {
-        if (app[i].estado==2) {
+        if (app[i].estado==2 & app[i].dias>0) {
           array.push([app[i].id, app[i].dias,  'green'])
-        }else{
+        }else if(app[i].dias_sin>0){
           array.push([app[i].id, app[i].dias_sin, 'gold'])
       }
       }
-      console.log(array);
       
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);

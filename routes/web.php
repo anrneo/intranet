@@ -47,6 +47,7 @@ Route::middleware(['auth'])->group(function() {
     Route::post('/documentar', 'HelpController@documentar');
     Route::get('/borrarhd/{id}', 'HelpController@borrarhd');
     Route::get('/mail', 'HelpController@mail');
+    Route::get('/videoreportar', 'HelpController@videoreportar');
 
     //Novedades
     Route::get('/gh/novedades/admin', 'NovedadesController@admin');
@@ -132,7 +133,9 @@ Route::post('documento', 'DocumentController@create')->name('documento.create');
     Route::put('users/{user}', 'userController@update')->name('users.update')
         ->middleware('permission:users.edit');
 
-
+        Route::post('users/{user}', 'userController@updatepass')->name('users.updatepass')
+        ->middleware('permission:users.edit');
+        
     Route::get('users/{user}', 'userController@show')->name('users.show')
         ->middleware('permission:users.show');
 

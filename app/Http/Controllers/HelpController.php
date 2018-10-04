@@ -427,7 +427,12 @@ class HelpController extends Controller
     {
         $tec = DB::table('help_desks')->where('area', 'Sistemas')->get();
         $reports=DB::select("SELECT id, estado, datediff(f_respuesta, created_at) as dias, datediff(now(), created_at) as dias_sin from help_desks");
-
+        $asignado=DB::select("SELECT area, count(area) as cant
+                                from help_desks
+                                where estado<>2
+                                group by area
+                                having count(area) > 1
+                                ORDER BY count(area) desc");
         $comu = DB::table('help_desks')->where('area', 'Comunicaciones')->get();
         $comp = DB::table('help_desks')->where('area', 'Compras, Mantenimiento y Mensajería')->get();
         $soli = DB::table('help_desks')->where('requerimiento', 'Solicitud')->get();
@@ -439,7 +444,7 @@ class HelpController extends Controller
         $solicitud=$soli->count();
         $incidencia=$inci->count();
         //dd($reports);
-        return view('help.matriz',  compact('sistemas', 'comun', 'compras', 'solicitud', 'incidencia', 'reports'));
+        return view('help.matriz',  compact('sistemas', 'comun', 'compras', 'solicitud', 'incidencia', 'reports', 'asignado'));
     }
 
     public function documentar(Request $request)
@@ -500,9 +505,13 @@ class HelpController extends Controller
 
     public function mail()
     {
-       
-               
             return view('help.mail');
+        
+    }
+
+    public function videoreportar()
+    {
+            return view('help.tutorial.videoreportar');
         
     }
 }

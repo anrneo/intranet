@@ -167,7 +167,7 @@
           <input type="text" class="form-control" id="asunto" name="asunto" placeholder="¿Cúal es el motivo de tu Solicitud?" required>
       </div>
         <div class="form-group">
-          <label for="archivo" class="col-sm-12 col-form-label">Adjuntar Archivo (Max. 5MB, jpg, jpeg, pdf)</label>
+          <label for="archivo" class="col-sm-12 col-form-label">Adjuntar Archivo (Max. 3MB, jpg, jpeg, pdf, word, excel)</label>
             <input type="file" class="form-control" id="archivohd" name="archivo">
       </div>
       </div>

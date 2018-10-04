@@ -22,6 +22,26 @@
 
                         {!! Form::close() !!}      
                     </div>
+                    
+                    <div class="row">
+                        {!! Form::model($user, ['route' => ['users.updatepass', $user->id],
+                        'method' => 'POST']) !!}
+                        <div class="col-sm-12">
+                            <div class="col-sm-12">
+                            <div class="form-group">
+                                {!! Form::label('password', 'Cambiar Contraseña') !!}
+                                {!! Form::password('password',  ['class' => 'form-control', 'required' => 'required']) !!}
+                            </div>
+                            </div>
+                             <div class="form-group">
+                                {{ Form::submit('Cambiar', ['class' => 'btn btn-primary btn-lg btn-block'])}}
+                            </div>
+
+                            </div>
+
+                        {!! Form::close() !!}      
+                    </div>
+
                 </div>
             </div>
         </div>

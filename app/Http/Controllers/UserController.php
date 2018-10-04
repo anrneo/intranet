@@ -58,7 +58,7 @@ class UserController extends Controller
         'tipoequipo' => $request['tipoequipo'],
         'serial' => $request['serial'],
         'email' => $request['email'],
-        'password' => bcrypt($request['password']),
+        'password' => bcrypt($request->input('cedula')),
        ]);
 
        // Actualizar Permisos
@@ -104,11 +104,20 @@ class UserController extends Controller
         //Actualizar user
        $user->update($request->all());
 
+       
+       // Actualizar Permisos
+       $user->permissions()->sync($request->get('permissions'));
+       
+       return redirect('/users');
+    }
+
+    public function updatepass(Request $request, User $user)
+    {
+      
        $pass=bcrypt($request['password']);
        $user->password=$pass;
        $user->save();
-       // Actualizar Permisos
-       $user->permissions()->sync($request->get('permissions'));
+     
        
        return redirect('/users');
     }

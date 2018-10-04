@@ -218,6 +218,7 @@
                     <li class="submenu">
                         <a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-fw fa-sitemap"></i><span> Directorio </span> </a>
                     </li>
+                   
                     @can('reint.admin')
                         <li class="submenu">
                             <a href="#" ><i class="fa fa-thumbs-o-up"></i><span> Reintegros </span> <span class="menu-arrow"></span> </a>
@@ -237,6 +238,7 @@
                             <ul class="list-unstyled">
                                 <li><a href="/reportar">Generar Solicitud</a></li>
                                 <li><a href="/consultar">Mis Solicitudes</a></li>
+                                <li><a href="/videoreportar">Videos Tutoriales</a></li>
                                     @can('help.admin')
                                         <li>
                                             <a href="/admin">Administración</a>
@@ -330,6 +332,7 @@
     </footer>
 
 </div>
+
 <!-- END main -->
 {!! Html::script('/js/modernizr.min.js') !!}
 {!! Html::script('/js/jquery.min.js') !!}
@@ -349,45 +352,35 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
-
     
     <script>
         $(document).ready(function(){
-
-           
-
             $("#dataformajax").submit(function(event){
                 event.preventDefault();
                 cc=$('#ccajax').val()
                $.get('/api/datajax?cc='+cc, function(data){
                   console.log(data);
-                  
                })
-    });
-    $("#dataformajax1").submit(function(event){
+            });
+
+            $("#dataformajax1").submit(function(event){
                 event.preventDefault();
                 cc1=$('#ccajax1').val()
                $.post('/api/datajax1',{ cc: cc1 }, function(data){
                   console.log(data);
-                  
                })
-    });
-           
-
+             });
 
             $('#felicitar').on({
                 click:function(){
                     $.get( "/felicitar", function(data){
                           console.log(data);
-        
-    });
-                       
-                    
+                    });
                 }
             })
+
             $('#ingreso').hide()
             $('#retiro').hide()
-
             $('#subareahd').on({
             change:function(){
                 if($(this).val()=='3B'){
@@ -521,6 +514,7 @@
                     }
                 }
             })
+
             if(window.location.href!='http://localhost/'){
                 $('.button-menu-mobile').click();
             }
@@ -723,7 +717,7 @@
                  }
                  })
 
- $('#filtrararchivos').keyup(function () {
+                $('#filtrararchivos').keyup(function () {
              
              var rex = new RegExp($(this).val(), 'i');
              $('.buscar tr').hide();
@@ -740,8 +734,8 @@
 	    var fileName = this.files[0].name;
 	    var fileSize = this.files[0].size;
 
-	    if(fileSize > 5000000){
-            toastr.error("El archivo no debe superar los 5MB");
+	    if(fileSize > 3000000){
+            toastr.error("El archivo no debe superar los 3MB");
 		this.value = '';
 		this.files[0].name = '';
 	    }else{
@@ -750,8 +744,14 @@
 
 		// console.log(ext);
 		switch (ext) {
-			case 'jpg':
-			case 'jpeg':
+            case 'xls':
+             case 'xlsm':
+            case 'xlsx':
+            case 'docx':
+            case 'doc':
+            case 'jpg':
+            case 'jpeg':
+            case 'PDF':
 			case 'pdf': break;
 			default:
             toastr.options = { "closeButton":true, "progressBar": true};
