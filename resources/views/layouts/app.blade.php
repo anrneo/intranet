@@ -209,21 +209,33 @@
                     </li>
                     @if(!Auth::check())
                         <li class="submenu">
-                            <a class="{{ request()->is('login') ? 'active' : '' }}" href="{{ route('login') }}"><i class="fa fa-fw fa-user"></i><span> Iniciar Sessión </span> </a>
+                            <a class="{{ request()->is('login') ? 'active' : '' }}" href="{{ route('login') }}"><i class="fa fa-fw fa-user"></i><span> Iniciar Sesión </span> </a>
                         </li>
                     @endif
                     <li class="submenu">
-                        <a href="https://redvitalut.com/pqrsf/buzon.php" target="_blank"><i class="fa fa-fw fa-bars"></i><span> Crear Pqrsf </span> </a>
+                            <a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-fw fa-sitemap"></i><span> Directorio </span> </a>
                     </li>
+
                     <li class="submenu">
-                        <a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-fw fa-sitemap"></i><span> Directorio </span> </a>
+                        <a href="#"><i class="fa fa-comments"></i> <span> PQRS-F </span> <span class="menu-arrow"></span></a>
+                            <ul class="list-unstyled">
+                                <li><a href="https://redvitalut.com/pqrsf/buzon.php" target="_blank"><i class="fa fa-bullhorn"></i><span> Crear Pqrsf </span></a></li>
+                                <li><a href="/adminpqrsf" target="_blank"><i class="fa fa-line-chart"></i><span> Admin PQRSF</span></a></li>
+                                <li><a href="/videopqrsf"><i class="fa fa-youtube-play"></i><span>Video Tutorial</span></a></li>
+                                @if(Auth::check())
+                                <li><a href="/intrapqr/index.php?id={{ Auth::user()->id }}" target="_blank"><i class="fa fa-line-chart"></i><span> Local</span></a></li>
+                                @endif
+                            </ul>
                     </li>
+                   
+                   
+                    
                    
                     @can('reint.admin')
                         <li class="submenu">
                             <a href="#" ><i class="fa fa-thumbs-o-up"></i><span> Reintegros </span> <span class="menu-arrow"></span> </a>
                             <ul class="list-unstyled">
-                                <li><a href="/reintegros" target="_blank">Formulario</a></li>
+                                <li><a href="/reintegros" target="_blank"><i class="fa fa-edit"></i>Formulario</a></li>
                                 <li><a href="/reintegros/login.php?id={{ Auth::user()->id }}" target="_blank">Administración</a></li>
                                 <li><a href="https://redvitalut.com/reintegros/" target="_blank">Formulario red</a></li>
                                 <li><a href="https://redvitalut.com/reintegros/login.php?id={{ Auth::user()->id }}" target="_blank">Administración red</a></li>
@@ -239,13 +251,12 @@
                                 <li><a href="/reportar">Generar Solicitud</a></li>
                                 <li><a href="/consultar">Mis Solicitudes</a></li>
                                 <li><a href="/videoreportar">Videos Tutoriales</a></li>
+                                <li><a href="/matriz">Indicadores</a> </li>
                                     @can('help.admin')
                                         <li>
                                             <a href="/admin">Administración</a>
                                         </li>
-                                        <li>
-                                            <a href="/matriz">Indicadores</a>
-                                        </li>
+                                       
                                     @endcan
                                     @can('help.asigna')
                                         <li>
@@ -254,21 +265,14 @@
                                     @endcan
                             </ul>
                     </li>
-
-                    
-                    @can('pqrdats.index')
                     <li class="submenu">
-                        <a href="#"><i class="fa fa-comments"></i> <span> Admin PQRSF </span> <span class="menu-arrow"></span></a>
-                            <ul class="list-unstyled">
-                                 <li>
-                                     <a href="/intrapqr/index.php?user={{ Auth::user()->name }}" target="_blank"><i class="fa fa-comments"></i><span> Localhost </span> </a>
-                                 </li>
-                                  <li>
-                                     <a href="http://intra.sumimedical.com/intrapqr/index.php?user={{ Auth::user()->name }}" target="_blank"><i class="fa fa-address-book-o"></i><span> Internet </span> </a>
-                                 </li>
-                            </ul>
+                        <a href="#"><i class="fa fa-universal-access"></i> <span> Gestión Humana</span> <span class="menu-arrow"></span></a>
+                        <ul class="list-unstyled">
+                            <li><a href="/certificado"><i class="fa fa-check-square-o"></i> <span> Certificado Laboral</span> </a>
+                            </li>
+                        </ul>
                     </li>
-                    @endcan
+                    
                    
                     
                     @can('users.index')

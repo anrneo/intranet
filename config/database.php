@@ -78,6 +78,17 @@ return [
             'prefix' => '',
         ],
 
+        'sqlsrv1' => [
+            'driver' => 'sqlsrv',
+            'host' => env('DB_HOST2', '192.168.0.5'),
+            'port' => env('DB_PORT2', '1433'),
+            'database' => env('DB_DATABASE2', 'nomina'),
+            'username' => env('DB_USERNAME2', 'sa'),
+            'password' => env('DB_PASSWORD2', 'zeus'),
+            'charset' => 'utf8',
+            'prefix' => '',
+        ],
+
     ],
 
     /*

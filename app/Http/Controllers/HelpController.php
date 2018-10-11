@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 use App\HelpDesk;
 use App\DocuHelpDesk;
 use App\User;
+use PDF;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Datos;
+use App\Http\Controllers\NumeroALetras;
 use App\Notifications\NotiHelpDesk;
 use Mail;
 use Validator;
@@ -316,7 +318,7 @@ class HelpController extends Controller
             'usuario' => Auth()->user()->name,
             'subarea' => $request->input('subarea'),
             'user_id' => Auth()->user()->id,
-            'post_id' => $request->input('asignado_a'),
+            'post_id' => $request->input('user_id'),
             'accion' => 'asignar_user'
         ]);
         
@@ -426,13 +428,72 @@ class HelpController extends Controller
     public function matriz()
     {
         $tec = DB::table('help_desks')->where('area', 'Sistemas')->get();
-        $reports=DB::select("SELECT id, estado, datediff(f_respuesta, created_at) as dias, datediff(now(), created_at) as dias_sin from help_desks");
+
+        $reports=DB::select("SELECT *, datediff(f_respuesta, created_at) as dias, datediff(now(), created_at) as dias_sin from help_desks");
+        
         $asignado=DB::select("SELECT area, count(area) as cant
                                 from help_desks
                                 where estado<>2
                                 group by area
                                 having count(area) > 1
                                 ORDER BY count(area) desc");
+
+        $subareasis=DB::select("SELECT subarea, count(subarea) as cant
+        from help_desks
+        where estado<>2 and area='Sistemas'
+        group by subarea
+        having count(subarea) > 0
+        ORDER BY count(subarea) desc");
+
+        $subareasis1=DB::select("SELECT nombre_asig, count(nombre_asig) as cant
+        from help_desks
+        where estado=1 and area='Sistemas'
+        group by nombre_asig
+        having count(nombre_asig) > 0
+        ORDER BY count(nombre_asig) desc");
+
+        $subareacom=DB::select("SELECT subarea, count(subarea) as cant
+        from help_desks
+        where estado<>2 and area='Comunicaciones'
+        group by subarea
+        having count(subarea) > 0
+        ORDER BY count(subarea) desc");
+
+        $subareacom1=DB::select("SELECT nombre_asig, count(nombre_asig) as cant
+        from help_desks
+        where estado=1 and area='Comunicaciones'
+        group by nombre_asig
+        having count(nombre_asig) > 0
+        ORDER BY count(nombre_asig) desc");
+        //dd(count($subareacom1));
+        $subareacomp=DB::select("SELECT subarea, count(subarea) as cant
+        from help_desks
+        where estado<>2 and area='Compras, Mantenimiento y Mensajería'
+        group by subarea
+        having count(subarea) > 0
+        ORDER BY count(subarea) desc");
+
+        $subareacomp1=DB::select("SELECT nombre_asig, count(nombre_asig) as cant
+        from help_desks
+        where estado=1 and area='Compras, Mantenimiento y Mensajería'
+        group by nombre_asig
+        having count(nombre_asig) > 0
+        ORDER BY count(nombre_asig) desc");
+        
+        $subareagh=DB::select("SELECT subarea, count(subarea) as cant
+        from help_desks
+        where estado<>2 and area='Gestión Humana'
+        group by subarea
+        having count(subarea) > 0
+        ORDER BY count(subarea) desc");
+
+        $subareagh1=DB::select("SELECT nombre_asig, count(nombre_asig) as cant
+        from help_desks
+        where estado=1 and area='Gestión Humana'
+        group by nombre_asig
+        having count(nombre_asig) > 0
+        ORDER BY count(nombre_asig) desc");
+
         $comu = DB::table('help_desks')->where('area', 'Comunicaciones')->get();
         $comp = DB::table('help_desks')->where('area', 'Compras, Mantenimiento y Mensajería')->get();
         $soli = DB::table('help_desks')->where('requerimiento', 'Solicitud')->get();
@@ -444,7 +505,9 @@ class HelpController extends Controller
         $solicitud=$soli->count();
         $incidencia=$inci->count();
         //dd($reports);
-        return view('help.matriz',  compact('sistemas', 'comun', 'compras', 'solicitud', 'incidencia', 'reports', 'asignado'));
+        return view('help.matriz',  compact('sistemas', 'comun', 'compras', 'solicitud', 'incidencia', 'reports',
+                     'asignado', 'subareasis', 'subareacom', 'subareacomp','subareagh', 'subareasis1', 'subareacom1',
+                    'subareacomp1', 'subareagh1'));
     }
 
     public function documentar(Request $request)
@@ -512,6 +575,46 @@ class HelpController extends Controller
     public function videoreportar()
     {
             return view('help.tutorial.videoreportar');
+        
+    }
+
+    public function cambioarea(Request $request)
+    {
+        $area=$request->input('area');
+        if($area=='Sistemas'){
+            $admin=430;
+        }elseif ($area=='Comunicaciones') {
+            $admin=502;
+        }elseif ($area=='Gestión Humana') {
+            $admin=475;
+        }elseif ($area=='Compras, Mantenimiento y Mensajería') {
+            $admin=476;
+        }
+        
+        
+        $report = HelpDesk::find($request->input('id'));  
+        $report->area = $area;
+        $report->admin = $admin;
+        $report->subarea = $request->input('subarea');
+        $report->save();  
+
+        $notificacion = array(
+            'message' => 'Gracias! Su cambio de área se realizó con éxito.', 
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notificacion);
+        
+    }
+
+
+    public function test()
+    {
+        $letras = NumeroALetras::convertir(1500000);
+        $users = User::all();
+
+        $pdf = PDF::loadView('pdf', ['users' => $users]);
+
+        return $pdf->download('certificado.pdf');
         
     }
 }

@@ -12,13 +12,25 @@ class PqrdatController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __constuct(){
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         $pqrdats = Pqrdat::paginate(5);
-
         return view('pqrdats.index', compact('pqrdats'));
     }
+    public function adminpqrsf()
+    {
+        return redirect('http://intra.sumimedical.com/intrapqr/index.php?id='.Auth()->user()->id.'');
+    }
 
+
+    public function videopqrsf()
+    {
+        return view('Pqrdats.videos');
+    }
     /**
      * Show the form for creating a new resource.
      *

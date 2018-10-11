@@ -14,6 +14,7 @@
 Route::get('/', 'HomeController@index');
 Route::get('/excel', 'HomeController@excel');
 
+
 Route::get('/zeus1', function(){
     return view('zeus');
 });
@@ -23,10 +24,17 @@ Route::get('/ajax', 'HomeController@ajax');
 
 Auth::routes();
 
+//certificado laboral
+Route::get('/certificado', 'HomeController@certificado')->middleware('auth');
+//admin parsf
+Route::get('/adminpqrsf', 'pqrdatController@adminpqrsf')->middleware('auth');
+Route::get('/videopqrsf', 'pqrdatController@videopqrsf')->middleware('auth');
 
 //Rutas
 Route::middleware(['auth'])->group(function() {
 
+
+    
     //-->Ruta para cumpleaños 
     Route::get('/felicita/{id}', 'HomeController@felicita');
     Route::get('/borrarfeli/{id}', 'HomeController@borrarfeli');
@@ -48,6 +56,9 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/borrarhd/{id}', 'HelpController@borrarhd');
     Route::get('/mail', 'HelpController@mail');
     Route::get('/videoreportar', 'HelpController@videoreportar');
+    Route::post('/cambioarea', 'HelpController@cambioarea');
+    Route::get('/test', 'HelpController@test');
+
 
     //Novedades
     Route::get('/gh/novedades/admin', 'NovedadesController@admin');
@@ -147,14 +158,6 @@ Route::post('documento', 'DocumentController@create')->name('documento.create');
     Route::get('users/{user}/edit', 'userController@edit')->name('users.edit')
         ->middleware('permission:users.edit');
 
-    // Prueba de PDF para certificado laboral
-    Route::get('pdf', function(){
-
-        $users = App\User::all();
-
-        $pdf = PDF::loadView('pdf', ['users' => $users]);
-
-        return $pdf->download('certificado.pdf');
-    });
+    
 
 });

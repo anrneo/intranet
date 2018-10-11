@@ -161,25 +161,32 @@ El desarrollo profesional permanente del personal de Sumimedical, a través de e
             </div>
             
           @foreach ($reports as $repo)
+            @php
+                $a1=explode('-',$repo->nacimi);
+                $a2=explode('-',date('Y-m-d'));
+            @endphp
+            @if ($a1[2]>=$a2[2])
             <ul id="sortable">
-              <li>
-                <div class="media">
-                  <div class="media-left align-self-center">
-                    <img class="rounded-circle" src="/img/sites/cake.png">
-                  </div>
-                  <div class="media-body">
-                    <h4>{{$repo->name}}</h4>
-                    <p style="margin-bottom: 0rem;"><b style="color:#212529a1">{{$repo->cumple}}</b></p>
-                    <p><b style="color:#212529a1">{{$repo->sede}}</b></p>
-                    <div class="media-right">
-                    
-                    <a href="/felicita/{{$repo->id}}"><button type="button" class="btn btn-success btn-block btn-sm">Enviar Felicitación</button></a>												
-                   
+                <li>
+                  <div class="media">
+                    <div class="media-left align-self-center">
+                      <img class="rounded-circle" src="/img/sites/cake.png">
+                    </div>
+                    <div class="media-body">
+                      <h4>{{$repo->name}}</h4>
+                      <p style="margin-bottom: 0rem;"><b style="color:#212529a1">{{$repo->cumple}}</b></p>
+                      <p><b style="color:#212529a1">{{$repo->sede}}</b></p>
+                      <div class="media-right">
+                      
+                      <a href="/felicita/{{$repo->id}}"><button type="button" class="btn btn-success btn-block btn-sm">Enviar Felicitación</button></a>												
+                     
+                      </div>
                     </div>
                   </div>
-                </div>
-              </li>
-            </ul>
+                </li>
+              </ul>
+            @endif
+           
           @endforeach
         </div>
     </div>

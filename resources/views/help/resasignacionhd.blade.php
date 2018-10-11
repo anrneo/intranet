@@ -242,43 +242,44 @@ if ($conn->connect_error) {
             </button>
           </div>
           <div class="modal-body">
-           <form action="/asignarhelp" method="post">
-            {{csrf_field()}}
-                <div class="form-group row">
-                    <label for="asunto" class="col-sm-2 col-form-label">Subarea</label>
-                    <div class="col-sm-10">
-                      <input type="text" class="form-control" value="{{ $row->subarea }}" readonly>
-                    </div>
-                </div>
-                <input type="text" value="{{ $row->id }}" name="id" hidden>
-                <div class="form-group row">
-                        <label for="asunto" class="col-sm-2 col-form-label">Asunto</label>
-                        <div class="col-sm-10">
-                          <input type="text" class="form-control" value="{{ $row->asunto }}" readonly>
+                <form action="/asignarhelp" method="post">
+                    {{csrf_field()}}
+                        <div class="form-group row">
+                            <label for="asunto" class="col-sm-2 col-form-label">Subarea</label>
+                            <div class="col-sm-10">
+                              <input type="text" class="form-control" name="subarea" value="{{ $row->subarea }}" readonly>
+                            </div>
                         </div>
-                </div>
-                <div class="form-group row">
-                        <label for="asunto" class="col-sm-2 col-form-label">Descripcion</label>
-                        <div class="col-sm-10">
-                          <textarea class="form-control" readonly>{{ $row->descripcion }}</textarea>
+                        <input type="text" value="{{ $row->id }}" name="id" hidden>
+                        <input type="text" value="{{ $row->users_id }}" name="user_id" hidden>
+                        <div class="form-group row">
+                                <label for="asunto" class="col-sm-2 col-form-label">Asunto</label>
+                                <div class="col-sm-10">
+                                  <input type="text" class="form-control" value="{{ $row->asunto }}" readonly>
+                                </div>
                         </div>
-                </div>
-                <div class="form-group row">
-                        <label for="asunto" class="col-sm-2 col-form-label">Asignar</label>
-                        <div class="col-sm-10">
-                                <select class="form-control" name="asignado_a">
-                                    @foreach ($asignados[$row->subarea] as $key)
-                                        <option value="@php echo $key['id']; @endphp">@php echo $key['nombre']; @endphp</option>
-                                    @endforeach
-                                </select>
+                        <div class="form-group row">
+                                <label for="asunto" class="col-sm-2 col-form-label">Descripcion</label>
+                                <div class="col-sm-10">
+                                  <textarea class="form-control" readonly>{{ $row->descripcion }}</textarea>
+                                </div>
                         </div>
-                </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Asignar</button>
-          </div>
-        </form>
+                        <div class="form-group row">
+                                <label for="asunto" class="col-sm-2 col-form-label">Asignar</label>
+                                <div class="col-sm-10">
+                                        <select class="form-control" name="asignado_a">
+                                            @foreach ($asignados[$row->subarea] as $key)
+                                                <option value="{{$key['id']}}">{{$key['nombre']}}</option>
+                                            @endforeach
+                                        </select>
+                                </div>
+                        </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Asignar</button>
+                  </div>
+                </form>
         </div>
       </div>
     </div>

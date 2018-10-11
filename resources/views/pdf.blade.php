@@ -12,18 +12,12 @@
 </style>
 <body> 
 @php
-$serverName = "192.168.0.5"; //serverName\instanceName
-$connectionInfo = array( "Database"=>"nomina", "UID"=>"sa", "PWD"=>"zeus", "Characterset"=>"UTF-8");
-$conn = sqlsrv_connect( $serverName, $connectionInfo);
-$ced=Auth::user()->cedula;
-$sql = "SELECT * FROM certificado_emp where Identificacion = $ced";
-$stmt = sqlsrv_query( $conn, $sql );
-$row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC);
+
 date_default_timezone_set("America/Bogota");
-$fecha = utf8_encode(strtotime($row['F_InicioContrato']));
-$cargo = ucfirst(strtolower($row['Cargo']));
+$fecha = utf8_encode(strtotime($users[0]->F_InicioContrato));
+$cargo = ucfirst(strtolower($users[0]->Cargo));
 $hoy = utf8_encode(strtotime(date('Y-m-d')));
-$f = explode('-', $row['F_InicioContrato']);
+$f = explode('-', $users[0]->F_InicioContrato);
 $dia=date("l", $fecha);
 
 
@@ -79,7 +73,7 @@ if ($mes1=="December") $mes1="Diciembre";
 $ano=date("Y");
 $date = $dia. ' '. date('d', $fecha) . ' de ' .' '. $mes. ' de '. date('Y', $fecha);
 $datehoy = $hoy1. ' '. date('d', $hoy) . ' de ' .' '. $mes1. ' de '. date('Y', $hoy);
-sqlsrv_close( $conn );
+
 
 @endphp
 	<h3 style="padding-top:180px; text-align: center;">CERTIFICA QUE</h3>
@@ -89,16 +83,16 @@ sqlsrv_close( $conn );
 	<br>
 	<br>
 	<p style="text-align: justify; padding-left:70px; padding-right:70px; font-size:18px;line-height:28px;">
-		<b>{{ Auth::user()->name }}</b>, identificado (a) con Cédula de Ciudadanía número
-		<b>{{ Auth::user()->cedula }}</b>, se encuentra laborando en esta empresa como <b>@php echo $cargo;  @endphp</b>, desde el día <b>@php echo $date;  @endphp</b> hasta la fecha; con
-		un contrato a <b>término fijo</b>, con un salario básico de $<b>@php echo $row['SueldoBasico'];  @endphp</b> <i></i> mensuales.
+		La persona <b>{{ $users[0]->Nombres }}</b>, identificado(a) con Cédula de Ciudadanía número
+		<b>{{ $users[0]->Identificacion }}</b>, se encuentra laborando en esta empresa como <b>{{ $users[0]->Cargo }}</b>, desde el día <b>@php echo $date;  @endphp</b> hasta la fecha; con
+		un contrato a <b>término fijo</b> y con un salario básico de $<b>{{ $users[0]->SueldoBasico }}</b> ({{$letras}}PESOS M/L)<i></i> mensuales.
 	</p>
 	<br>
 	<br>
 		<p style="text-align: justify; padding-left:70px; padding-right:70px; font-size:18px">
 		
 
-		La presente se expide el @php echo $datehoy;  @endphp.
+		La presente se expide el día @php echo $datehoy;  @endphp.
 	</p>
 	<br>
 	<br>

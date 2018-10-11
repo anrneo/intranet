@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\User;
+use PDF;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 use App\Notifications\NotiHelpDesk;
 
 class HomeController extends Controller
 {
+    
+
     public function ajax()
     {
         return view('ajax');
@@ -72,8 +75,13 @@ class HomeController extends Controller
     public function index()
     {
         
-        $reports=DB::select("SELECT name, cumple,sede, id,  DAYOFYEAR(nacimi) as dia FROM users having dia>=DAYOFYEAR(now()) order by dia limit 6");
-
+        $reports=DB::select("SELECT name, cumple,sede, id,  DAYOFYEAR(nacimi) as dia, nacimi FROM users having dia>=DAYOFYEAR(now()) order by dia limit 6");
+        foreach ($reports as $key => $value) {
+            # code...
+        }
+        $a=explode('-',$value->nacimi);
+        $b=explode('-',date('Y-m-d'));
+            //dd($a,$b);
         return view('welcome', compact('reports'));
     }
 
@@ -100,5 +108,26 @@ class HomeController extends Controller
             });
             /** Descargamos nuestro archivo pasandole la extensión deseada (xls, xlsx) */
         })->download('xlsx');
+    }
+
+   
+
+    public function certificado()
+    {
+
+        $ced=Auth()->user()->cedula;
+        $users = DB::connection('sqlsrv1')->select('SELECT * FROM certificado_emp where Identificacion ='.$ced.'');
+        
+        $letras = NumeroALetras::convertir($users[0]->SueldoBasico);
+      if($users[0]->SueldoBasico%1000000==0){
+        $letras .= 'DE ';
+      }
+        //dd($letras);
+       
+        $pdf = PDF::loadView('pdf', ['letras' => $letras], ['users' => $users]);
+
+        return $pdf->download('certificado_'.$users[0]->Identificacion.'.pdf');
+        
+         
     }
 }

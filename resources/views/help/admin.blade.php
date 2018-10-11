@@ -57,6 +57,9 @@
     <li class="nav-item">
         <a class="nav-link" data-toggle="tab" href="#menu3">Solucionados <span class="badge badge-primary">{{$soluci}}</span></a>
     </li>
+    <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#menu6">Filtros <span class="badge badge-primary"></span></a>
+        </li>
   </ul>
   <br>
   <!-- Tab panes -->
@@ -369,9 +372,14 @@
                     @endif
                 @endforeach
             </div><br><br><br><br>
-        </div>   
-    </div> 
-</div>
+        </div> 
+         <!-- filtros -->
+        <div id="menu6" class="container tab-pane fade col-sm-12">
+                <div class="row text-center" style="margin:0 8px 8px 8px">
+                    <a href=""></a>
+                </div>   
+        </div> 
+    </div>
 
 <!-- Modal Asignar-->
 @foreach($reports as $row)
@@ -440,6 +448,7 @@
             </button>
           </div>
           <div class="modal-body">
+                
            <form action="/aprobarhelp" method="post">
             {{csrf_field()}}
                 <div class="form-group row">
@@ -577,5 +586,112 @@
       </div>
     </div>
 @endforeach
+
+<!-- Modal cambio area-->
+@foreach($reports as $row)
+    <div class="modal fade" id="Modalcambioa{{ $row->id }}" tabindex="-1" role="dialog" aria-labelledby="ModalLabelcambioa" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-contentasignar">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ModalLabelasignar">Cambio de área de Requerimiento</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+           <form action="/cambioarea" method="post">
+            {{csrf_field()}}
+                <div class="form-group row">
+                    <label for="asunto" class="col-sm-2 col-form-label">Area</label>
+                    <div class="col-sm-10">
+                            <select class="form-control" id="camareahd" name="area" onchange="cambioarea()">
+                                    <option value="Sistemas">Sistemas</option>
+                                    <option value="Comunicaciones">Comunicaciones</option>
+                                    <option value="Gestión Humana">Gestión Humana</option>
+                                    <option value="Compras, Mantenimiento y Mensajería">Compras, Mantenimiento y Mensajería</option>
+                                  </select>
+                     
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="asunto" class="col-sm-2 col-form-label">Subarea</label>
+                    <div class="col-sm-10">
+                            <select class="form-control" id="camsubareahd" name="subarea">
+                                    <option>Redes e Internet</option>
+                                    <option>Telefonía</option>
+                                    <option>Correo</option>
+                                    <option>Impresoras</option>
+                                    <option>Equipos de cómputo</option>
+                                    <option>Servidores</option>
+                                    <option>Sistemas de Información</option>
+                                    <option>Zeus</option>
+                                    <option>Intranet</option>
+                                    <option>Ingreso de Empleado</option>
+                                    <option>Retiro de Empleado</option>
+                                  </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                        <label for="asunto" class="col-sm-2 col-form-label">Asunto</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" value="{{ $row->asunto }}" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                            <label for="asunto" class="col-sm-2 col-form-label">Descripción</label>
+                            <div class="col-sm-10">
+                              <textarea class="form-control" readonly>{{ $row->descripcion }}</textarea>
+                            </div>
+                        </div>
+                    <input type="text" value="{{ $row->id }}" name="id" hidden>
+            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Cambiar área</button>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
+@endforeach
+
+<script>
+    function cambioarea() {
+        area = document.getElementById("camareahd").value;
+        if(area=='Sistemas'){
+            document.getElementById("camsubareahd").innerHTML = '<option>Redes e Internet</option>\
+                                    <option>Telefonía</option>\
+                                    <option>Correo</option>\
+                                    <option>Impresoras</option>\
+                                    <option>Equipos de cómputo</option>\
+                                    <option>Servidores</option>\
+                                    <option>Sistemas de Información</option>\
+                                    <option>Zeus</option>\
+                                    <option>Intranet</option>\
+                                    <option>Ingreso de Empleado</option>\
+                                    <option>Retiro de Empleado</option>'
+        }else if(area=='Comunicaciones'){
+            document.getElementById("camsubareahd").innerHTML = '<option>Publicación de Contenidos en Intranet</option>\
+                                        <option>Publicación de Contenidos Página Web</option>\
+                                        <option>Revisión y/o Creación de Contenido</option>\
+                                        <option>Mantenimiento y/o Instalación de contenido Imagen Corporativa</option>\
+                                        <option>Solicitud de Piezas Publicitarias</option>\
+                                        <option>Creación de Campaña Publicitaria</option>\
+                                        <option>Creación de Videos Institucionales</option>'
+        }else if(area=='Gestión Humana'){
+            document.getElementById("camsubareahd").innerHTML = '<option>PQRSF Empleado</option>'
+        }else if(area=='Compras, Mantenimiento y Mensajería'){
+            document.getElementById("camsubareahd").innerHTML = '<option>Mantenimiento</option>\
+                                            <option>Compras</option>\
+                                            <option>Mensajeria</option>'
+        }
+        
+    }
+ 
+</script>
+{!! Html::script('/js/jquery.min.js') !!}
+
+<script src="js/admin.js">
+</script>
 
 @endsection
