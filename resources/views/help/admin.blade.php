@@ -20,27 +20,61 @@
     width: 755px;
     margin-left: -126px;
 }
+.dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
 </style>
 <div class="col-sm-12">  
-<h5>Administración Gestor de Solicitudes área de {{$rol}} <span class="badge badge-primary">{{$tot}}</span></h5>
-  <br>
-  @php
-  $servername = "localhost";
-      $username = "root";
-      $password = "";
-      $dbname = "intranet";
-      
-      // Create connection
-      $conn = new mysqli($servername, $username, $password, $dbname);
-      // Check connection
-      if ($conn->connect_error) {
-          die("Connection failed: " . $conn->connect_error);
-      } 
-@endphp 
- <!-- Nav tabs -->
+    <h5>Administración Gestor de Solicitudes área de {{$rol}} <span class="badge badge-primary">{{$tot}}</span></h5>
+      <br>
+      @php
+      $servername = "localhost";
+          $username = "root";
+          $password = "";
+          $dbname = "intranet";
+
+          // Create connection
+          $conn = new mysqli($servername, $username, $password, $dbname);
+          // Check connection
+          if ($conn->connect_error) {
+              die("Connection failed: " . $conn->connect_error);
+          } 
+    @endphp 
+     <!-- Nav tabs -->
   <ul class="nav nav-tabs">
     <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" href="#menu2">Pendientes <span class="badge badge-primary">{{$inci+$soli}}</span></a>
+        <a class="nav-link" data-toggle="tab" href="#menu2">Pendientes <span class="badge badge-primary">{{$inci+$soli}}</span></a>
     </li>
     <li class="nav-item">
       <a class="nav-link" data-toggle="tab" href="#home">Incidentes <span class="badge badge-primary">{{$inci}}</span></a>
@@ -52,13 +86,13 @@
         <a class="nav-link" data-toggle="tab" href="#menu5">Aprobados <span class="badge badge-primary">{{$aprobado}}</span></a>
       </li>
     <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#menu4">Asignados <span class="badge badge-primary">{{$num_asig}}</span></a>
+            <a class="nav-link " data-toggle="tab" href="#menu4">Asignados <span class="badge badge-primary">{{$num_asig}}</span></a>
         </li>
     <li class="nav-item">
         <a class="nav-link" data-toggle="tab" href="#menu3">Solucionados <span class="badge badge-primary">{{$soluci}}</span></a>
     </li>
     <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#menu6">Filtros <span class="badge badge-primary"></span></a>
+            <a class="nav-link active" data-toggle="tab" href="#menu6">Consultas</a>
         </li>
   </ul>
   <br>
@@ -161,7 +195,7 @@
             </div><br><br><br><br>
         </div>
         <!-- Pendientes -->
-        <div id="menu2" class="container tab-pane active col-sm-12">
+        <div id="menu2" class="container tab-pane fade col-sm-12">
             <div class="row text-center" style="margin:0 8px 8px 8px"> 
                 <div class="col-sm-1"><b>Id</b></div>
                 <div class="col-sm-1"><b>Fecha</b></div>
@@ -374,12 +408,37 @@
             </div><br><br><br><br>
         </div> 
          <!-- filtros -->
-        <div id="menu6" class="container tab-pane fade col-sm-12">
+        <div id="menu6" class="container tab-pane active col-sm-12">
+            @if(count($consulta)>0)
+            Por favor selecciona para ver las asignaciones en tu área
+                <select class="custom-select custom-select-sm" id="consulta">
+                    @foreach ($consulta as $item)
+                        <option value="{{$item->nombre_asig}}">{{$item->nombre_asig}} ({{$item->cant}})</option>
+                    @endforeach
+                </select>
+                <br><br>
                 <div class="row text-center" style="margin:0 8px 8px 8px">
-                    <a href=""></a>
-                </div>   
+                        <div class="col-sm-1"><b>Id</b></div>
+                        <div class="col-sm-1"><b>Fecha</b></div>
+                        <div class="col-sm-1"><b>Dias</b></div>
+                        <div class="col-sm-2"><b>Usuario</b></div>
+                        <div class="col-sm-1"><b>Tipo</b></div>
+                        <div class="col-sm-2"><b>Subárea</b></div>
+                        <div class="col-sm-1"><b>Descripción</b></div>
+                        <div class="col-sm-1"><b>Opciones</b></div>
+                </div>
+                <div class="accordion" id="resultconsulta">
+
+                </div>
+                @else 
+                    <div class="alert alert-primary" role="alert">
+                        No tienes requerimientos asignados, gracias
+                    </div>
+                @endif
+                
         </div> 
     </div>
+</div>
 
 <!-- Modal Asignar-->
 @foreach($reports as $row)
@@ -687,11 +746,71 @@
         }
         
     }
- 
 </script>
 {!! Html::script('/js/jquery.min.js') !!}
 
-<script src="js/admin.js">
+<script>
+$(function(){
+
+
+$('#consulta').click(function(){
+    html=''
+
+    $.ajax({
+        method: "POST",
+        url: "api/consultahd",
+        data: { name: $(this).val() }
+      })
+        .done(function( msg ) {
+            $('#resultconsulta').html('')
+            msg.forEach(dat => {
+                $('#resultconsulta').append('<div class="card">\
+                            <div class="card-header" id="123heading'+dat.id+'">\
+                                <div class="row text-center">\
+                                    <div class="col-sm-1">'+dat.id+'</div>\
+                                    <div class="col-sm-1" style="margin-left:0">'+dat.created_at+'</div>\
+                                    <div class="col-sm-1">'+dat.dias_sin+'</div>\
+                                    <div class="col-sm-2">'+dat.nombre+'</div>\
+                                    <div class="col-sm-1">'+dat.requerimiento+'</div>\
+                                    <div class="col-sm-2">'+dat.subarea+'</div>\
+                                    <div class="col-sm-1"> \
+                                        <a href=""   class="collapsed" data-toggle="collapse" data-target="#123collapse'+dat.id+'" aria-expanded="false" aria-controls="123collapse'+dat.id+'">\
+                                            Ver <i class="fa fa-plus"></i>\
+                                        </a>\
+                                    </div>\
+                                    <div class="col-sm-1" style="margin:0 0 0 -20px">\
+                                            <div class="btn-group">\
+                                                <button type="button" class="btn btn-primary btn-sm">Opciones</button>\
+                                                <button type="button" class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">\
+                                                    <span class="caret"></span>\
+                                                </button>\
+                                                <div class="dropdown-menu ">\
+                                                    <a class="dropdown-item" href="" data-toggle="modal" data-target="#Modaldocu'+dat.id+'">Documentar</a>\
+                                                     <a class="dropdown-item" href="" data-toggle="modal" data-target="#Modalasignar'+dat.id+'">Reasignar</a>\
+                                                             <a class="dropdown-item" href="/responder/'+dat.id+'">Finalizar</a>\
+                                                    </div>\
+                                            </div>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                            <div id="123collapse'+dat.id+'" class="collapse" aria-labelledby="123heading'+dat.id+'" data-parent="#resultconsulta">\
+                                    <div class="card-body">\
+    <p>\
+            <b>Sede: </b>'+dat.sede+'<br>\
+            <b >Asunto: </b>'+dat.asunto+'<br>\
+    <b >Tiempo de Solución: </b>'+dat.t_std+' hora(s)<br>\
+    <b>Fecha asignación: </b>'+dat.f_asignado+'<br>\
+    <b>Prerespuesta Aprobación: </b>'+dat.res_aprobado+'<br>\
+    <b>Fecha de Aprobación: </b>'+dat.f_aprobado+'<br>\
+    <b>Descripción: </b>'+dat.descripcion+'<br>\
+     </p>\
+            </div>\
+                            </div>\
+                        </div>')     
+            });
+        });
+})
+})
 </script>
 
 @endsection

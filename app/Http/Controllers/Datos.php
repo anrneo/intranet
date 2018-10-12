@@ -477,7 +477,8 @@ class Datos extends Controller
             476 => 'Compras y Mantenimiento',
             500 => 'Sistemas',
             2 => 'Sistemas',
-            475 => 'Gestión Humana'
+            475 => 'Gestión Humana',
+            505 => 'Gerencia'
 
             );  
 

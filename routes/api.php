@@ -22,3 +22,5 @@ Route::get('/datajax', 'HomeController@datajax');
 
 Route::post('/datajax1', 'HomeController@datajax1');
 
+Route::post('/consultahd', 'HelpController@consultahd');
+

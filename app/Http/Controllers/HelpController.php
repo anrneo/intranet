@@ -189,13 +189,15 @@ class HelpController extends Controller
             ->where('id', $_GET['id'])
             ->update(['read_at' => now()]);            
         }
-        if(Auth()->user()->id==500 || Auth()->user()->id==2){
+        if(Auth()->user()->id==500 || Auth()->user()->id==2 || Auth()->user()->id==505){
             $reports=DB::select("SELECT *, datediff(f_respuesta, created_at) as dias, datediff(now(), created_at) as dias_sin from help_desks order by updated_at desc");
             $in=DB::table('help_desks')->where([['requerimiento', 'Incidente'],['estado', 0]])->get();
             $so=DB::table('help_desks')->where([['requerimiento', 'Solicitud'],['estado', 0]])->get();
             $asi=DB::table('help_desks')->where('estado', 1)->get();
             $solu=DB::table('help_desks')->where('estado', 2)->get();
             $apro=DB::table('help_desks')->where('estado', 3)->get();
+            $consulta=DB::select("SELECT nombre_asig, count(nombre_asig) as cant from help_desks where nombre_asig is not null and estado=1 group by nombre_asig having count(nombre_asig) > 0 ORDER BY count(nombre_asig) desc");
+        //dd($consulta);
         }elseif(Auth()->user()->id==430){
             //$reports = DB::table('help_desks')->where('admin', Auth()->user()->id)->orderBy('updated_at', 'desc')->get();
             $user=Auth()->user()->id;
@@ -211,7 +213,9 @@ class HelpController extends Controller
                                         ->orWhere([['admin', 501],['estado', 2]])->get();
             $apro=DB::table('help_desks')->where([['admin', Auth()->user()->id],['estado', 3]])
                                         ->orWhere([['admin', 501],['estado', 3]])->get();
-        }else{
+            $consulta=DB::select("SELECT nombre_asig, count(nombre_asig) as cant from help_desks where nombre_asig is not null and estado=1 and admin=430 group by nombre_asig having count(nombre_asig) > 0 ORDER BY count(nombre_asig) desc");
+
+            }else{
             $user=Auth()->user()->id;
             $reports=DB::select("SELECT *, datediff(f_respuesta, created_at) as dias, datediff(now(), created_at) as dias_sin from help_desks where admin=$user order by updated_at desc");
             //dd(count($reports));
@@ -220,7 +224,7 @@ class HelpController extends Controller
             $asi=DB::table('help_desks')->where([['admin', Auth()->user()->id],['estado', 1]])->get();
             $solu=DB::table('help_desks')->where([['admin', Auth()->user()->id],['estado', 2]])->get();
             $apro=DB::table('help_desks')->where([['admin', Auth()->user()->id],['estado', 3]])->get();
-
+            $consulta=DB::select("SELECT nombre_asig, count(nombre_asig) as cant from help_desks where nombre_asig is not null and estado=1 and admin=$user group by nombre_asig having count(nombre_asig) > 0 ORDER BY count(nombre_asig) desc");
         }
         $inci=$in->count();
         $soli=$so->count();
@@ -238,7 +242,8 @@ class HelpController extends Controller
         $rol = $dat->roles(Auth()->user()->id);
         //dd($user);
          
-        return view('help.admin', compact('reports','inci','soli','tot', 'soluci', 'asignados', 'num_asig', 'rol', 'aprobado', 'categoria', 'subarea'));
+        return view('help.admin', compact('reports','inci','soli','tot', 'soluci', 'asignados', 
+        'num_asig', 'rol', 'aprobado', 'categoria', 'subarea', 'consulta'));
     }
 
     public function getresponder($id)
@@ -607,15 +612,26 @@ class HelpController extends Controller
     }
 
 
+    public function consultahd(Request $request)
+    {
+        $name=$request->name;
+        $user=DB::select("SELECT *, datediff(f_respuesta, created_at) as dias, datediff(now(), created_at) as dias_sin
+         from help_desks 
+         where nombre_asig='".$name."' and estado=1
+         order by dias_sin desc");
+        
+        return $user;
+    }
+
     public function test()
     {
-        $letras = NumeroALetras::convertir(1500000);
-        $users = User::all();
-
-        $pdf = PDF::loadView('pdf', ['users' => $users]);
-
-        return $pdf->download('certificado.pdf');
-        
+        $name='Carlos Villa';
+        $user=DB::select("SELECT *, datediff(now(), created_at) as dias_sin
+         from help_desks 
+         where nombre_asig='".$name."' and estado=1
+         order by dias_sin desc");
+        dd($user);
+        return $user;
     }
 }
 
