@@ -1,26 +1,10 @@
 @extends('layouts.app')
 @section('content')
+
 <div class="col-sm-12">  
     <h5>Mis Requerimientos al Gestor de Solicitudes</h5>
     <br>
-    @php
-         /*$servername = "192.168.0.6";
-$username = "root";
-$password = "1lipCIJVrnD7m10S";
-$dbname = "intranet";*/
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "intranet";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-} 
-    @endphp
+   
 <!-- Nav tabs -->
     <ul class="nav nav-tabs">
         <li class="nav-item">
@@ -37,18 +21,19 @@ if ($conn->connect_error) {
     <br>
         <!-- Tab panes -->
     <div class="tab-content">
-        <div class="row text-center" style="margin:0 33px 8px 10px">
-            <div class="col-sm-1"><b>Id</b></div>
-            <div class="col-sm-1"><b>Fecha</b></div>
-            <div class="col-sm-1"><b>Dias</b></div>
-            <div class="col-sm-1"><b>Tipo</b></div>
-            <div class="col-sm-2"><b>Area</b></div>
-            <div class="col-sm-2"><b>Subárea</b></div>
-            <div class="col-sm-2"><b>Estado</b></div>
-            <div class="col-sm-1"><b>Descripción</b></div>
-        </div>
+        
         <!-- Pendientes -->
         <div id="home" class="container tab-pane fade col-sm-12">
+                <div class="row text-center" style="margin:0 20px 8px 10px">
+                        <div class="col-sm-1"><b>Id</b></div>
+                        <div class="col-sm-1"><b>Fecha</b></div>
+                        <div class="col-sm-1"><b>Dias</b></div>
+                        <div class="col-sm-1"><b>Tipo</b></div>
+                        <div class="col-sm-2"><b>Area</b></div>
+                        <div class="col-sm-2"><b>Subárea</b></div>
+                        <div class="col-sm-2"><b>Estado</b></div>
+                        <div class="col-sm-1"><b>Descripción</b></div>
+                </div>
                 <div class="accordion" id="Examplehome">
                         @foreach($reports as $row)
                             @if ($row->estado!=2)
@@ -82,6 +67,17 @@ if ($conn->connect_error) {
         </div>
         <!-- Solucionadas -->
         <div id="menu1" class="container tab-pane fade col-sm-12">
+                <div class="row text-center" style="margin:0 20px 8px 10px">
+                        <div class="col-sm-1"><b>Id</b></div>
+                        <div class="col-sm-1"><b>Fecha</b></div>
+                        <div class="col-sm-1"><b>Dias</b></div>
+                        <div class="col-sm-1"><b>Tipo</b></div>
+                        <div class="col-sm-2"><b>Area</b></div>
+                        <div class="col-sm-2"><b>Subárea</b></div>
+                        <div class="col-sm-2"><b>Estado</b></div>
+                        <div class="col-sm-1"><b>Descripción</b></div>
+                        <div class="col-sm-1"><b>Evaluación</b></div>
+                </div>
                 <div class="accordion" id="Examplemenu1">
                      @foreach($reports as $row)
                          @if ($row->estado==2)
@@ -99,10 +95,13 @@ if ($conn->connect_error) {
                                             @include('help.otros.estado')
                                     </div>
                                     <div class="col-sm-1">  
-                                    <a href=""   class="collapsed" data-toggle="collapse" data-target="#collapse{{ $row->id }}" aria-expanded="false" aria-controls="collapse{{ $row->id }}">
-                                        Ver <i class="fa fa-plus"></i>
-                                    </a>
-                                    </div>    
+                                        <a href=""   class="collapsed" data-toggle="collapse" data-target="#collapse{{ $row->id }}" aria-expanded="false" aria-controls="collapse{{ $row->id }}">
+                                            Ver <i class="fa fa-plus"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-sm-1">
+                                            @include('help.otros.evaluar')
+                                    </div>
                                 </div>   
                              </div>
                              <div id="collapse{{ $row->id }}" class="collapse" aria-labelledby="heading{{ $row->id }}" data-parent="#Examplemenu1">
@@ -115,6 +114,17 @@ if ($conn->connect_error) {
         </div>
         <!-- Todos -->
          <div id="menu2" class="container tab-pane active col-sm-12">
+                <div class="row text-center" style="margin:0 20px 8px 10px">
+                        <div class="col-sm-1"><b>Id</b></div>
+                        <div class="col-sm-1"><b>Fecha</b></div>
+                        <div class="col-sm-1"><b>Dias</b></div>
+                        <div class="col-sm-1"><b>Tipo</b></div>
+                        <div class="col-sm-2"><b>Area</b></div>
+                        <div class="col-sm-2"><b>Subárea</b></div>
+                        <div class="col-sm-2"><b>Estado</b></div>
+                        <div class="col-sm-1"><b>Descripción</b></div>
+                        <div class="col-sm-1"><b>Evaluación</b></div>
+                </div>
                 <div class="accordion" id="Examplemenu2">
                     @foreach($reports as $row)
                         <div class="card">
@@ -141,7 +151,10 @@ if ($conn->connect_error) {
                                             Ver <i class="fa fa-plus"></i>
                                         </a>
                                     </div> 
-                                    <div class="col-sm-1"><a href="/borrarhd/{{ $row->id }}">borrar</a></div>   
+                                    <div class="col-sm-1">
+                                            @include('help.otros.evaluar1')
+                                        <a href="/borrarhd/{{ $row->id }}">borrar</a>
+                                    </div>   
                                 </div>   
                             </div>
                             <div id="{{ $row->id }}collapse{{ $row->id }}" class="collapse" aria-labelledby="{{ $row->id }}heading{{ $row->id }}" data-parent="#Examplemenu2">
@@ -162,5 +175,181 @@ if ($conn->connect_error) {
     @endif
     
  
+    {!! Html::script('/js/jquery.min.js') !!}
 
+    <script>
+       
+       function mOver1(obj) {
+       id1='star1-'+obj
+       document.getElementById(id1).style.color = "red";
+        }
+        function mOut1(obj) {
+            id1='star1-'+obj
+       document.getElementById(id1).style.color = "";
+        }
+        
+        function mOver2(obj) {
+       id1='star1-'+obj
+       id2='star2-'+obj
+       document.getElementById(id1).style.color = "red";
+       document.getElementById(id2).style.color = "red";
+        }
+        function mOut2(obj) {
+            id1='star1-'+obj
+            id2='star2-'+obj
+       document.getElementById(id1).style.color = "";
+       document.getElementById(id2).style.color = "";
+        }
+
+        function mOver3(obj) {
+       id1='star1-'+obj
+       id2='star2-'+obj
+       id3='star3-'+obj
+       document.getElementById(id1).style.color = "gold";
+       document.getElementById(id2).style.color = "gold";
+       document.getElementById(id3).style.color = "gold";
+        }
+        function mOut3(obj) {
+            id1='star1-'+obj
+            id2='star2-'+obj
+            id3='star3-'+obj
+       document.getElementById(id1).style.color = "";
+       document.getElementById(id2).style.color = "";
+       document.getElementById(id3).style.color = "";
+        }
+
+        function mOver4(obj) {
+       id1='star1-'+obj
+       id2='star2-'+obj
+       id3='star3-'+obj
+       id4='star4-'+obj
+       document.getElementById(id1).style.color = "green";
+       document.getElementById(id2).style.color = "green";
+       document.getElementById(id3).style.color = "green";
+       document.getElementById(id4).style.color = "green";
+        }
+        function mOut4(obj) {
+            id1='star1-'+obj
+            id2='star2-'+obj
+            id3='star3-'+obj
+            id4='star4-'+obj
+       document.getElementById(id1).style.color = "";
+       document.getElementById(id2).style.color = "";
+       document.getElementById(id3).style.color = "";
+       document.getElementById(id4).style.color = "";
+        }
+
+        function mOver5(obj) {
+       id1='star1-'+obj
+       id2='star2-'+obj
+       id3='star3-'+obj
+       id4='star4-'+obj
+       id5='star5-'+obj
+       document.getElementById(id1).style.color = "green";
+       document.getElementById(id2).style.color = "green";
+       document.getElementById(id3).style.color = "green";
+       document.getElementById(id4).style.color = "green";
+       document.getElementById(id5).style.color = "green";
+        }
+        function mOut5(obj) {
+            id1='star1-'+obj
+            id2='star2-'+obj
+            id3='star3-'+obj
+            id4='star4-'+obj
+            id5='star5-'+obj
+       document.getElementById(id1).style.color = "";
+       document.getElementById(id2).style.color = "";
+       document.getElementById(id3).style.color = "";
+       document.getElementById(id4).style.color = "";
+       document.getElementById(id5).style.color = "";
+        }
+       
+
+       function mOver11(obj) {
+       id11='star11-'+obj
+       document.getElementById(id11).style.color = "red";
+        }
+        function mOut11(obj) {
+            id11='star11-'+obj
+       document.getElementById(id11).style.color = "";
+        }
+        
+        function mOver22(obj) {
+       id11='star11-'+obj
+       id22='star22-'+obj
+       document.getElementById(id11).style.color = "red";
+       document.getElementById(id22).style.color = "red";
+        }
+        function mOut22(obj) {
+            id11='star11-'+obj
+            id22='star22-'+obj
+       document.getElementById(id11).style.color = "";
+       document.getElementById(id22).style.color = "";
+        }
+
+        function mOver33(obj) {
+       id11='star11-'+obj
+       id22='star22-'+obj
+       id33='star33-'+obj
+       document.getElementById(id11).style.color = "gold";
+       document.getElementById(id22).style.color = "gold";
+       document.getElementById(id33).style.color = "gold";
+        }
+        function mOut33(obj) {
+            id11='star11-'+obj
+            id22='star22-'+obj
+            id33='star33-'+obj
+       document.getElementById(id11).style.color = "";
+       document.getElementById(id22).style.color = "";
+       document.getElementById(id33).style.color = "";
+        }
+
+        function mOver44(obj) {
+       id11='star11-'+obj
+       id22='star22-'+obj
+       id33='star33-'+obj
+       id44='star44-'+obj
+       document.getElementById(id11).style.color = "green";
+       document.getElementById(id22).style.color = "green";
+       document.getElementById(id33).style.color = "green";
+       document.getElementById(id44).style.color = "green";
+        }
+        function mOut44(obj) {
+            id11='star11-'+obj
+            id22='star22-'+obj
+            id33='star33-'+obj
+            id44='star44-'+obj
+       document.getElementById(id11).style.color = "";
+       document.getElementById(id22).style.color = "";
+       document.getElementById(id33).style.color = "";
+       document.getElementById(id44).style.color = "";
+        }
+
+        function mOver55(obj) {
+       id11='star11-'+obj
+       id22='star22-'+obj
+       id33='star33-'+obj
+       id44='star44-'+obj
+       id55='star55-'+obj
+       document.getElementById(id11).style.color = "green";
+       document.getElementById(id22).style.color = "green";
+       document.getElementById(id33).style.color = "green";
+       document.getElementById(id44).style.color = "green";
+       document.getElementById(id55).style.color = "green";
+        }
+        function mOut55(obj) {
+            id11='star11-'+obj
+            id22='star22-'+obj
+            id33='star33-'+obj
+            id44='star44-'+obj
+            id55='star55-'+obj
+       document.getElementById(id11).style.color = "";
+       document.getElementById(id22).style.color = "";
+       document.getElementById(id33).style.color = "";
+       document.getElementById(id44).style.color = "";
+       document.getElementById(id55).style.color = "";
+        }
+       
+   
+</script>
 @endsection

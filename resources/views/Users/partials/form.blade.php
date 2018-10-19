@@ -8,8 +8,9 @@
         </div>
         <div class="col-sm-3">
             <div class="form-group">
-                {!! Form::label('cedula', 'Número de Identificación') !!}
-                {!! Form::text('cedula', null, ['class' => 'form-control', 'required' => 'required']) !!}
+                {!! Form::label('cedula', 'N. de Identificación') !!}
+                {!! Form::label('','',['id' => 'labelid']) !!}
+                {!! Form::text('cedula', null, ['class' => 'form-control', 'required' => 'required', 'id'=>'iduser']) !!}
             </div>
         </div>
         <div class="col-sm-3">
@@ -86,8 +87,9 @@
     </div>
     <div class="col-sm-3">
         <div class="form-group">
-            {!! Form::label('email', 'Correo Corporativo') !!}
-            {!! Form::text('email', null, ['class' => 'form-control', 'required' => 'required']) !!}
+            {!! Form::label('email', 'Correo') !!}
+            {!! Form::label('','',['id' => 'labelemail']) !!}
+            {!! Form::text('email', null, ['class' => 'form-control', 'required' => 'required', 'id' => 'emailuser']) !!}
         </div>
     </div>
     <div class="col-sm-3">

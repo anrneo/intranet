@@ -57,6 +57,7 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/mail', 'HelpController@mail');
     Route::get('/videoreportar', 'HelpController@videoreportar');
     Route::post('/cambioarea', 'HelpController@cambioarea');
+    Route::get('/evaluacionhd/{id}/{eval}', 'HelpController@evaluacionhd');
     Route::get('/test', 'HelpController@test');
 
 

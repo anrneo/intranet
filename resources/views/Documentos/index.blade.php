@@ -113,9 +113,9 @@
                                         <p class="text-danger" style="font-size:17px"><i><b>Recuerde: los archivos no pueden contener tildes ni caracteres especiales en el nombre.</b></i></p>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-md-6 control-label">Cargar Archivo</label>
+                                        <label class="col-md-6 control-label">Cargar Archivo (Max. 10MB, jpg, jpeg, pdf, word, excel)</label>
                                         <div class="col-md-12">
-                                            <input id="arc" type="file" class="form-control" name="archivo" required>
+                                            <input id="documentgd" type="file" class="form-control" name="archivo" required>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -168,8 +168,45 @@
 
     </div>
 </div>
-@endsection
+
+{!! Html::script('/js/jquery.min.js') !!}
+
 <script>
-        $(document).ready(function(){ 
-    });
+    $(function(){ 
+        $(document).on('change','#documentgd',function(){
+	    // this.files[0].size recupera el tamaño del archivo
+	    // alert(this.files[0].size);
+	
+	    var fileName = this.files[0].name;
+	    var fileSize = this.files[0].size;
+
+	    if(fileSize > 10000000){
+            toastr.error("El archivo no debe superar los 10MB");
+		this.value = '';
+		this.files[0].name = '';
+	    }else{
+		// recuperamos la extensión del archivo
+		var ext = fileName.split('.').pop();
+
+		// console.log(ext);
+		switch (ext) {
+            case 'xls':
+             case 'xlsm':
+            case 'xlsx':
+            case 'docx':
+            case 'doc':
+            case 'jpg':
+            case 'jpeg':
+            case 'PDF':
+			case 'pdf': break;
+			default:
+            toastr.options = { "closeButton":true, "progressBar": true};
+            toastr.error("El archivo no tiene la extensión adecuada");
+				this.value = ''; // reset del valor
+				this.files[0].name = '';
+		}
+	    }
+        });
+});
 </script>
+@endsection

@@ -167,7 +167,7 @@
           <input type="text" class="form-control" id="asunto" name="asunto" placeholder="¿Cúal es el motivo de tu Solicitud?" required>
       </div>
         <div class="form-group">
-          <label for="archivo" class="col-sm-12 col-form-label">Adjuntar Archivo (Max. 3MB, jpg, jpeg, pdf, word, excel)</label>
+          <label for="archivo" class="col-sm-12 col-form-label">Adjuntar Archivo (Max. 3MB, jpg, jpeg, pdf, word, excel, zip)</label>
             <input type="file" class="form-control" id="archivohd" name="archivo">
       </div>
       </div>
@@ -191,6 +191,390 @@
   </form>
   
 </div>
+
+{!! Html::script('/js/jquery.min.js') !!}
+
+<script>
+  $(function(){
+
+    
+    $('#ingreso').hide()
+            $('#retiro').hide()
+            $('#subareahd').on({
+            change:function(){
+                if($(this).val()=='3B'){
+                    $('#ingreso').hide()
+                    $('#retiro').hide()
+                    $('#divcategoria').show() 
+                    $('#categoriahd').html('<option value="301">Muebles y Enseres</option>\
+                                        <option value="302">Equipos de Computo</option>\
+                                        <option value="303">Telefonía</option>\
+                                        <option value="304">Redes</option>\
+                                        <option value="305">Aseo</option>\
+                                        <option value="306">Cafetería</option>\
+                                        <option value="307">Dotación de Consultorio</option>\
+                                        <option value="308">Logistica y Eventos</option>\
+                                        <option value="309">Papeleria</option>\
+                                        <option value="100">Otros</option>\
+                                       ')
+                }else if($(this).val()=='3A' || $(this).val()=='3C'){
+                    $('#ingreso').hide()
+                    $('#retiro').hide()
+                    $('#divcategoria').hide() 
+                }else if($(this).val()=='1A'){
+                    $('#ingreso').hide()
+                    $('#retiro').hide()
+                    $('#divcategoria').show()
+                    $('#categoriahd').html('<option value="101">Restricciones de páginas web</option>\
+                                        <option value="102">Limitaciones de ancho de banda</option>\
+                                        <option value="103">Adquisición o ampliación de canal de internet</option>\
+                                        <option value="104">Configuración de VPN</option>\
+                                        <option value="105">WIFI (Cambiar nombre o contraseña)</option>\
+                                        <option value="106">Equipo o sede sin internet</option>\
+                                        <option value="107">Lentitud de internet en equipo o sede</option>\
+                                        <option value="100">Otro</option>')
+                }else if($(this).val()=='1B'){
+                    $('#ingreso').hide()
+                    $('#retiro').hide()
+                    $('#divcategoria').show()
+                    $('#categoriahd').html('<option value="108">Creación de extensión telefónica</option>\
+                                        <option value="109">Grabación de llamada</option>\
+                                        <option value="110">Cambiar nombre a extensión telefónica</option>\
+                                        <option value="111">Desvío de llamadas</option>\
+                                        <option value="112">Modificación de audio en IVR</option>\
+                                        <option value="113">Informe de Telefonía</option>\
+                                        <option value="1131">Problemas al realizar llamada</option>\
+                                        <option value="100">Otro</option>')
+                }else if($(this).val()=='1C'){
+                    $('#ingreso').hide()
+                    $('#retiro').hide()
+                    $('#divcategoria').show()
+                    $('#categoriahd').html('<option value="114">Creación, configuración o eliminación de cuenta de correo</option>\
+                                        <option value="115">Configuración o modificación de firma corporativa</option>\
+                                        <option value="1151">Problemas con correo electrónico</option>\
+                                        <option value="100">Otro</option>')
+                }else if($(this).val()=='1D'){
+                    $('#ingreso').hide()
+                    $('#retiro').hide()
+                    $('#divcategoria').show()
+                    $('#categoriahd').html('<option value="116">Cambio de tóner</option>\
+                                        <option value="117">Informe de impresión</option>\
+                                        <option value="118">Adquisición o reemplazo de impresora</option>\
+                                        <option value="119">Instalación y configuración de impresora</option>\
+                                        <option value="120">Revisión de impresora</option>\
+                                        <option value="100">Otro</option>')
+                }else if($(this).val()=='1E'){
+                    $('#ingreso').hide()
+                    $('#retiro').hide()
+                    $('#divcategoria').show()
+                    $('#categoriahd').html('<option value="121">Asignación o cambio de equipo</option>\
+                                        <option value="122">Instalación o activación de Office</option>\
+                                        <option value="123">Instalación o activación de Windows</option>\
+                                        <option value="124">Instalación o activación de Antivirus</option>\
+                                        <option value="125">Backup de información</option>\
+                                        <option value="126">Instalación o actualización de programas</option>\
+                                        <option value="127">Problemas en pantalla, puertos USB, mouse o teclado</option>\
+                                        <option value="128">Bajo rendimiento de equipo</option>\
+                                        <option value="100">Otro</option>')
+                }else if($(this).val()=='1F'){
+                    $('#ingreso').hide()
+                    $('#retiro').hide()
+                    $('#divcategoria').show()
+                    $('#categoriahd').html('<option value="129">Creación de usuario de dominio</option>\
+                                        <option value="130">Ingreso de equipo al dominio</option>\
+                                        <option value="131">Creación o actualización de servidor</option>\
+                                        <option value="132">Configuración de servicios (DNS, FS, FTP)</option>\
+                                        <option value="133">Informe de servicios</option>\
+                                        <option value="134">Problemas con servicios DNS, archivos en el File Server o Directorio Activo</option>\
+                                        <option value="100">Otro</option>')
+                }else if($(this).val()=='1G'){
+                    $('#ingreso').hide()
+                    $('#retiro').hide()
+                    $('#divcategoria').show()
+                    $('#categoriahd').html('<option value="135">Estadísticas e Informes de RIPS</option>\
+                                            <option value="136">Inconsistencias en RIPS</option>\
+                                            <option value="100">Otro</option>')
+                }else if($(this).val()=='1H'){
+                    $('#ingreso').hide()
+                    $('#retiro').hide()
+                    $('#divcategoria').show()
+                    $('#categoriahd').html('<option value="137">Levantamiento de restricciones</option>\
+                                        <option value="138">Permisos adicionales en Zeus</option>\
+                                        <option value="139">Nuevas implementaciones o mejoras en el aplicativo</option>\
+                                        <option value="140">Problemas para ingresar al aplicativo o módulo</option>\
+                                        <option value="141">Lentitud en alguno de los módulos del aplicativo</option>\
+                                        <option value="100">Otro</option>')
+                                        $('#divreque').show()
+                }else if($(this).val()=='1I'){
+                    $('#divcategoria').show()
+                    $('#ingreso').hide()
+                    $('#retiro').hide()
+                    $('#categoriahd').html('<option value="142">Crear usuario</option>\
+                                        <option value="143">Permiso de acceso a módulo</option>\
+                                        <option value="144">No puedo acceder a la intranet</option>\
+                                        <option value="100">Otro</option>')
+                    }else if($(this).val()=='1J'){
+                    $('#ingreso').show()
+                    $('#retiro').hide()
+                    $('#divcategoria').hide()
+                }else if($(this).val()=='1K'){
+                    $('#retiro').show()
+                    $('#ingreso').hide()
+                    $('#divcategoria').hide()
+                }
+            }
+            })
+            
+             $('#categoriahd').on({
+                click:function(){
+                    if($(this).val()==null){
+                        toastr.options = { "closeButton":true, "progressBar": true};
+                        toastr.warning("Selecciona primero el requerimiento");
+                    }
+                }
+            })
+
+            
+            
+      
+        
+
+        $('#requerimientohd').on({
+            change:function(){
+                if($('#requerimientohd').val()=='Solicitud'){
+                    toastr.options = { "closeButton":true, "progressBar": true};
+                toastr.info("Solicitud: Tarea o actividad que no conlleva a la suspensión de un servicio o actividad diaria");
+                
+                }
+
+                if($('#requerimientohd').val()=='Incidente'){
+                    toastr.options = { "closeButton":true, "progressBar": true};
+                toastr.info("Incidente: Evento que impide la realización normal de actividades");
+               
+                                        
+                }
+                 if($('#requerimientohd').val()=='Solicitud' &&  $('#subareahd').val()=='1A'){
+                $('#categoriahd').html('<option value="101">Restricciones de páginas web</option>\
+                                        <option value="102">Limitaciones de ancho de banda</option>\
+                                        <option value="103">Adquisición o ampliación de canal de internet</option>\
+                                        <option value="104">Configuración de VPN</option>\
+                                        <option value="105">WIFI (Cambiar nombre o contraseña)</option>\
+                                        <option value="100">Otro</option>')
+                }else if($('#requerimientohd').val()=='Incidente' &&  $('#subareahd').val()=='1A'){ 
+                $('#categoriahd').html('<option value="106">Equipo o sede sin internet</option>\
+                                        <option value="107">Lentitud de internet en equipo o sede</option>\
+                                        <option value="100">Otro</option>')
+                                        }
+                
+               if($('#requerimientohd').val()=='Solicitud' && $('#subareahd').val()=='1B'){
+                $('#categoriahd').html('<option value="108">Creación de extensión telefónica</option>\
+                                        <option value="109">Grabación de llamada</option>\
+                                        <option value="110">Cambiar nombre a extensión telefónica</option>\
+                                        <option value="111">Desvío de llamadas</option>\
+                                        <option value="112">Modificación de audio en IVR</option>\
+                                        <option value="113">Informe de Telefonía</option>\
+                                        <option value="100">Otro</option>')
+                }else if($('#requerimientohd').val()=='Incidente' && $('#subareahd').val()=='1B'){
+                $('#categoriahd').html('<option value="1131">Problemas al realizar llamada</option>\
+                                        <option value="100">Otro</option>')
+                                        }
+
+                if($('#requerimientohd').val()=='Solicitud' && $('#subareahd').val()=='1C'){
+                $('#categoriahd').html('<option value="114">Creación, configuración o eliminación de cuenta de correo</option>\
+                                        <option value="115">Configuración o modificación de firma corporativa</option>\
+                                        <option value="100">Otro</option>')
+                }else if($('#requerimientohd').val()=='Incidente' && $('#subareahd').val()=='1C'){
+                $('#categoriahd').html('<option value="1151">Problemas con correo electrónico</option>\
+                                        <option value="100">Otro</option>')
+                                        }
+
+                if($('#requerimientohd').val()=='Solicitud' && $('#subareahd').val()=='1D'){
+                $('#categoriahd').html('<option value="116">Cambio de tóner</option>\
+                                        <option value="117">Informe de impresión</option>\
+                                        <option value="118">Adquisición o reemplazo de impresora</option>\
+                                        <option value="119">Instalación y configuración de impresora</option>\
+                                        <option value="100">Otro</option>')
+                }else if($('#requerimientohd').val()=='Incidente' && $('#subareahd').val()=='1D'){
+                $('#categoriahd').html('<option value="120">Revisión de impresora</option>\
+                                        <option value="100">Otro</option>')
+                                        }
+
+                if($('#requerimientohd').val()=='Solicitud' && $('#subareahd').val()=='1E'){
+                $('#categoriahd').html('<option value="121">Asignación o cambio de equipo</option>\
+                                        <option value="122">Instalación o activación de Office</option>\
+                                        <option value="123">Instalación o activación de Windows</option>\
+                                        <option value="124">Instalación o activación de Antivirus</option>\
+                                        <option value="125">Backup de información</option>\
+                                        <option value="126">Instalación o actualización de programas</option>\
+                                        <option value="100">Otro</option>')
+                }else if($('#requerimientohd').val()=='Incidente' && $('#subareahd').val()=='1E'){
+                $('#categoriahd').html('<option value="127">Problemas en pantalla, puertos USB, mouse o teclado</option>\
+                                        <option value="128">Bajo rendimiento de equipo</option>\
+                                        <option value="100">Otro</option>')
+                                        }
+
+                if($('#requerimientohd').val()=='Solicitud' && $('#subareahd').val()=='1F'){
+                $('#categoriahd').html('<option value="129">Creación de usuario de dominio</option>\
+                                        <option value="130">Ingreso de equipo al dominio</option>\
+                                        <option value="131">Creación o actualización de servidor</option>\
+                                        <option value="132">Configuración de servicios (DNS, FS, FTP)</option>\
+                                        <option value="133">Informe de servicios</option>\
+                                        <option value="100">Otro</option>')
+                }else if($('#requerimientohd').val()=='Incidente' && $('#subareahd').val()=='1F'){
+                $('#categoriahd').html('<option value="134">Problemas con servicios DNS, archivos en el File Server o Directorio Activo</option>\
+                                        <option value="100">Otro</option>')
+                                        }
+
+               
+
+                if($('#requerimientohd').val()=='Solicitud' && $('#subareahd').val()=='1G'){
+                $('#categoriahd').html('<option value="135">Estadísticas e Informes de RIPS</option>\
+                                        <option value="100">Otro</option>')
+                }else if($('#requerimientohd').val()=='Incidente' && $('#subareahd').val()=='1G'){
+                $('#categoriahd').html('<option value="136">Inconsistencias en RIPS</option>\
+                                        <option value="100">Otro</option>')
+                                        }
+                
+                if($('#requerimientohd').val()=='Solicitud' && $('#subareahd').val()=='1H'){
+                $('#categoriahd').html('<option value="137">Levantamiento de restricciones</option>\
+                                        <option value="138">Permisos adicionales en Zeus</option>\
+                                        <option value="139">Nuevas implementaciones o mejoras en el aplicativo</option>\
+                                        <option value="100">Otro</option>')
+                }else if($('#requerimientohd').val()=='Incidente' && $('#subareahd').val()=='1H'){
+                $('#categoriahd').html('<option value="140">Problemas para ingresar al aplicativo o módulo</option>\
+                                        <option value="141">Lentitud en alguno de los módulos del aplicativo</option>\
+                                        <option value="100">Otro</option>')
+                                        }
+
+                if($('#requerimientohd').val()=='Solicitud' && $('#subareahd').val()=='1I'){
+                $('#categoriahd').html('<option value="142">Crear usuario</option>\
+                                        <option value="143">Permiso de acceso a módulo</option>\
+                                        <option value="100">Otro</option>')
+                }else if($('#requerimientohd').val()=='Incidente' && $('#subareahd').val()=='1I'){
+                $('#categoriahd').html('<option value="144">No puedo acceder a la intranet</option>\
+                                        <option value="100">Otro</option>')
+                                        }
+            }
+        })
+
+        $('#reportehd').on('submit', function(event){
+            if($('#requerimientohd').val()=='Selecciona...'){
+                $('#requeri').css("color", "red")
+                toastr.options = { "closeButton":true, "progressBar": true};
+                toastr.error("Por favor selecciona el tipo de requerimiento");
+                event.preventDefault();
+            }
+            if($('#subareahd').val()=='1H'){
+                $('#admin').val(501) //Jorge Arboleda Vallejo
+            }
+            else if($('#areahd').val()=='Comunicaciones'){
+                $('#categoriahd').val('')
+                $('#admin').val(502) //laura vasquez
+            }
+            else if($('#areahd').val()=='Gestión Humana'){
+                $('#categoriahd').val('')
+                $('#admin').val(475) //Paola Fonseca
+            }
+            else if($('#areahd').val()=='Compras, Mantenimiento y Mensajería'){
+                $('#admin').val(476) //luisa giraldo
+            }
+            else if($('#subareahd').val()=='3A' || $('#subareahd').val()=='3C'){
+                $('#categoriahd').val('')
+            }
+            else{
+                 $('#admin').val(430) //fernando padron
+            }
+        })
+
+        $('#areahd').on({
+                change:function(){
+                if($(this).val()=='Comunicaciones'){
+                        $('#ingreso').hide()
+                        $('#retiro').hide()
+                        $('#divcategoria').hide()
+                        $('#subareahd').html('<option value="2A">Publicación de Contenidos en Intranet</option>\
+                                        <option value="2B">Publicación de Contenidos Página Web</option>\
+                                        <option value="2C">Revisión y/o Creación de Contenido</option>\
+                                        <option value="2D">Mantenimiento y/o Instalación de contenido Imagen Corporativa</option>\
+                                        <option value="2E">Solicitud de Piezas Publicitarias</option>\
+                                        <option value="2F">Creación de Campaña Publicitaria</option>\
+                                        <option value="2G">Creación de Videos Institucionales</option>')
+                }
+                else if($(this).val()=='Sistemas'){
+                        $('#ingreso').hide()
+                        $('#retiro').hide()
+                        $('#divcategoria').show()
+                        $('#subareahd').html('<option value="1A">Redes e Internet</option>\
+                                                <option value="1B">Telefonía</option>\
+                                                <option value="1C">Correo</option>\
+                                                <option value="1D">Impresoras</option>\
+                                                <option value="1E">Equipos de cómputo</option>\
+                                                <option value="1F">Servidores</option>\
+                                                <option value="1G">Sistemas de Información</option>\
+                                                <option value="1H">Zeus</option>\
+                                                <option value="1I">Intranet</option>\
+                                                <option value="1J">Ingreso de Empleado</option>\
+                                                <option value="1K">Retiro de Empleado</option>') 
+                        $('#categoriahd').html('')
+                    }
+                else if($(this).val()=='Gestión Humana'){
+                        $('#ingreso').hide()
+                        $('#retiro').hide()
+                        $('#divcategoria').hide()
+                        $('#subareahd').html('<option value="4A">PQRSF Empleado</option>') 
+                    }
+                    else{
+                        $('#ingreso').hide()
+                        $('#retiro').hide()
+                        $('#divcategoria').hide()
+                        $('#subareahd').html('<option value="3A">Mantenimiento</option>\
+                                            <option value="3B">Compras</option>\
+                                            <option value="3C">Mensajeria</option>')
+                    }
+                 }
+                 })
+
+             
+            
+        $(document).on('change','#archivohd',function(){
+	    // this.files[0].size recupera el tamaño del archivo
+	    // alert(this.files[0].size);
+	
+	    var fileName = this.files[0].name;
+	    var fileSize = this.files[0].size;
+
+	    if(fileSize > 3000000){
+            toastr.error("El archivo no debe superar los 3MB");
+		this.value = '';
+		this.files[0].name = '';
+	    }else{
+		// recuperamos la extensión del archivo
+		var ext = fileName.split('.').pop();
+
+		// console.log(ext);
+		switch (ext) {
+            case 'xls':
+             case 'xlsm':
+            case 'xlsx':
+            case 'docx':
+            case 'doc':
+            case 'jpg':
+            case 'jpeg':
+            case 'PDF':
+            case 'zip':
+            case 'ZIP':
+			case 'pdf': break;
+			default:
+            toastr.options = { "closeButton":true, "progressBar": true};
+            toastr.error("El archivo no tiene la extensión adecuada");
+				this.value = ''; // reset del valor
+				this.files[0].name = '';
+		}
+	    }
+        });
+  })
+
+</script>
 
 @endsection
 

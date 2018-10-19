@@ -175,14 +175,15 @@ class HelpController extends Controller
         $pend=$pe->count();
         $solu=$so->count();
         $tot=count($reports);
-        
+        $docu=DocuHelpDesk::all();
+
         $dat = new Datos;
         $categoria = $dat->tiempos();
 
-        return view('help.consultar', compact('reports','pend','solu','tot', 'categoria'));
+        return view('help.consultar', compact('reports','pend','solu','tot', 'categoria', 'docu'));
     }
 
-    public function admin()
+    public function admin() 
     {
         if(isset($_GET['id'])){
             DB::table('notifications')
@@ -226,6 +227,7 @@ class HelpController extends Controller
             $apro=DB::table('help_desks')->where([['admin', Auth()->user()->id],['estado', 3]])->get();
             $consulta=DB::select("SELECT nombre_asig, count(nombre_asig) as cant from help_desks where nombre_asig is not null and estado=1 and admin=$user group by nombre_asig having count(nombre_asig) > 0 ORDER BY count(nombre_asig) desc");
         }
+        $docu=DocuHelpDesk::all();
         $inci=$in->count();
         $soli=$so->count();
         $tot=count($reports);
@@ -243,7 +245,7 @@ class HelpController extends Controller
         //dd($user);
          
         return view('help.admin', compact('reports','inci','soli','tot', 'soluci', 'asignados', 
-        'num_asig', 'rol', 'aprobado', 'categoria', 'subarea', 'consulta'));
+        'num_asig', 'rol', 'aprobado', 'categoria', 'subarea', 'consulta', 'docu'));
     }
 
     public function getresponder($id)
@@ -361,7 +363,8 @@ class HelpController extends Controller
             //dd(count($reports)); 
         $asi=DB::table('help_desks')->where([['asignado_a', Auth()->user()->id],['estado', 1]])->get();
             $solu=DB::table('help_desks')->where([['asignado_a', Auth()->user()->id],['estado', 2]])->get();
-
+        
+        $docu=DocuHelpDesk::all();
         $tot=count($reports);
         $num_asig=$asi->count();
         $soluci=$solu->count();
@@ -370,7 +373,7 @@ class HelpController extends Controller
         $asignados = $dat->asigna();
         $categoria = $dat->tiempos();
 
-        return view('help.resasignacionhd', compact('reports', 'tot', 'soluci', 'num_asig', 'asignados', 'categoria'));
+        return view('help.resasignacionhd', compact('reports', 'tot', 'soluci', 'num_asig', 'asignados', 'categoria', 'docu'));
     }
 
     public function aprobarhelp(Request $request)
@@ -440,7 +443,7 @@ class HelpController extends Controller
                                 from help_desks
                                 where estado<>2
                                 group by area
-                                having count(area) > 1
+                                having count(area) > 0
                                 ORDER BY count(area) desc");
 
         $subareasis=DB::select("SELECT subarea, count(subarea) as cant
@@ -621,6 +624,28 @@ class HelpController extends Controller
          order by dias_sin desc");
         
         return $user;
+    }
+
+    public function buscaridhd(Request $request)
+    {
+        $id=$request->id;
+        $user=HelpDesk::find($id);
+        
+        return $user;
+    }
+
+    public function evaluacionhd($id,  $eval)
+    {
+        $user=HelpDesk::find($id);
+        $user->evaluar=$eval;
+        $user->save();
+
+        $notificacion = array(
+            'message' => 'Gracias! Su evaluación se guardó con éxito.', 
+            'alert-type' => 'success'
+        );
+
+        return back()->with($notificacion);
     }
 
     public function test()

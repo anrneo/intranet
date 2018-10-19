@@ -39,7 +39,7 @@
                                 <td> 
                                     @if ($report->ext == 'jpeg' || $report->ext == 'jpg')
                                                     <img src="/img/iconos/imagen.png" style="width:42px">   
-                                    @elseif($report->ext == 'pdf')
+                                    @elseif($report->ext == 'pdf' || $report->ext == 'PDF')
                                                     <img src="/img/iconos/pdf.png" style="width:42px">   
                                     @elseif ($report->ext == 'doc' || $report->ext == 'docx')
                                                     <img src="/img/iconos/word.png" style="width:42px">   

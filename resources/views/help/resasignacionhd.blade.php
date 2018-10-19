@@ -24,24 +24,7 @@
 <div class="col-sm-12">  
   <h5>Mis Asignaciones del Gestor de Solicitudes</h5>
   <br>
-  @php
-   /*$servername = "192.168.0.6";
-$username = "root";
-$password = "1lipCIJVrnD7m10S";
-$dbname = "intranet";*/
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "intranet";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-} 
-@endphp
+  
   <!-- Nav tabs -->
   <ul class="nav nav-tabs">
     <li class="nav-item">

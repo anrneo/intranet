@@ -1,6 +1,25 @@
 @extends('layouts.app')
 @section('content')
-
+<style>
+ .modal-contentasignar {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    border-radius: .3rem;
+    outline: 0;
+    width: 755px;
+    margin-left: -126px;
+}
+</style>
 <div class="container">
     <div class="panel panel-default">
         <div class="panel-heading text-center">
@@ -324,14 +343,34 @@
       var chart = new google.visualization.BarChart(document.getElementById('chart_divserie'));
 
       chart.draw(data, options);
-    }
+      }
     </script>
 
-    <div id="chart_divserie"></div>
-
+    <div id="chart_divserie"></div><br>
+    <form class="form-inline" id="buscarid" method="post">
+      <div class="form-group mx-sm-3 mb-2">
+        <label for="inputPassword2" class="sr-only">Password</label>
+        <input type="text" class="form-control form-control-sm" id="inputid" placeholder="Id...">
+      </div>
+      <button type="submit" class="btn btn-primary mb-2 btn-sm">Buscar Id</button>
+    </form>
+    {!! Html::script('/js/jquery.min.js') !!}
+<div id="resultbuscaridhd"></div>
       <script type='text/javascript'>
+
+      $(function(){
+        $("#buscarid").submit(function(event){
+          event.preventDefault();
+          id=$('#inputid').val()
+          $('#resultbuscaridhd').html('')
+         $('#resultbuscaridhd').html('<!-- Button trigger modal -->\
+              <button type="button" class="btn btn-primary" id="btnbuscarid" data-toggle="modal" data-target="#Modalbuscar'+id+'" hidden>\
+              </button>')
+              $('#btnbuscarid').click()
+        })
+        
+      });
       var app = @json($reports);
-      
       array=[['Element', 'Días', { role: 'style' }]]
       for (let i = 0; i < app.length; i++) {
         if (app[i].estado==2 & app[i].dias>0) {
@@ -433,4 +472,50 @@
       
    
 </div>
-  @endsection
+<!-- Modal buscarid-->
+@foreach($reports as $row)
+    
+    <div class="modal fade" id="Modalbuscar{{ $row->id }}" tabindex="-1" role="dialog" aria-labelledby="ModalLabelasignar" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-contentasignar">
+          <div class="modal-header">
+          <h5 class="modal-title" id="ModalLabelasignar">Requerimiento No. {{$row->id}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>
+              <b>Sede: </b>{{ $row->sede }} <br>
+              <b>Usuario: </b>{{$row->nombre}} <br>
+              <b>Asunto: </b>{{ $row->asunto }} <br>
+              <b>Tiempo de Solución: </b>{{ $row->t_std }} hora(s)<br>
+              <span id='timer_0' class='timer'></span><br>
+              @if ($row->archivo!='Sin archivo')
+                 <b>Archivo: </b><a href="/intranet/public/storage/{{ $row->archivo }}" class="card-link" target="_blank">Ver archivo adjunto</a><br>
+              @endif
+              <b>Descripción: </b>{{ $row->descripcion }} <br>
+              @if ($row->aprobado!=null)
+                 <b>Aprobación: </b>{{ $row->aprobado }} <br>
+                 <b>Fecha de aprobación: </b>{{ $row->f_aprobado }} <br>
+                 <b>Prerespuesta aprobación: </b>{{ $row->res_aprobado }} <br>
+                 <b>Tiempo estimado de solución: </b>{{ $row->tiempo.' '.$row->u_tiempo }} <br>
+                 <b>Fecha estimada de solución: </b>{{ $row->f_aproxsolu }} <br>
+              @endif
+              @if ($row->asignado_a!=0)
+                 <b>Asignado a: </b>{{ $row->nombre_asig }} <br>
+                 <b>Fecha de asignación: </b>{{ $row->f_asignado }} <br>
+                 @endif
+                 @if ($row->respuesta!=null)
+                  <b>Respuesta: </b>{{ $row->respuesta }} <br>
+                  <b>Fecha de respuesta: </b>{{ $row->f_respuesta }} <br>
+                @endif
+            </p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+@endforeach
+
+@endsection

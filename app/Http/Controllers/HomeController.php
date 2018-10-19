@@ -76,13 +76,9 @@ class HomeController extends Controller
     {
         
         $reports=DB::select("SELECT name, cumple,sede, id,  DAYOFYEAR(nacimi) as dia, nacimi FROM users having dia>=DAYOFYEAR(now()) order by dia limit 6");
-        foreach ($reports as $key => $value) {
-            # code...
-        }
-        $a=explode('-',$value->nacimi);
-        $b=explode('-',date('Y-m-d'));
-            //dd($a,$b);
-        return view('welcome', compact('reports'));
+        $feli=DB::select("SELECT * FROM `notifications` WHERE data like '%felicitar%'");
+        
+        return view('welcome', compact('reports', 'feli'));
     }
 
     public function excel()
@@ -127,6 +123,28 @@ class HomeController extends Controller
         $pdf = PDF::loadView('pdf', ['letras' => $letras], ['users' => $users]);
 
         return $pdf->download('certificado_'.$users[0]->Identificacion.'.pdf');
+        
+         
+    }
+
+    public function validaremail(Request $request)
+    {
+        $email=$request->email;
+        $dat=DB::select("SELECT count(id) as num FROM users where email='$email'");         
+      // dd($dat);
+
+        return $dat;
+        
+         
+    }
+
+    public function validarid(Request $request)
+    {
+        $cc=$request->cc;
+        $dat=DB::select("SELECT count(id) as num FROM users where cedula='$cc'");         
+      // dd($dat);
+
+        return $dat;
         
          
     }

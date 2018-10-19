@@ -2,6 +2,11 @@
 @section('content')
 
 <style>
+   
+.checked {
+    color: orange;
+}
+
     .modal-contentasignar {
     position: relative;
     display: -webkit-box;
@@ -58,19 +63,7 @@
 <div class="col-sm-12">  
     <h5>Administración Gestor de Solicitudes área de {{$rol}} <span class="badge badge-primary">{{$tot}}</span></h5>
       <br>
-      @php
-      $servername = "localhost";
-          $username = "root";
-          $password = "";
-          $dbname = "intranet";
-
-          // Create connection
-          $conn = new mysqli($servername, $username, $password, $dbname);
-          // Check connection
-          if ($conn->connect_error) {
-              die("Connection failed: " . $conn->connect_error);
-          } 
-    @endphp 
+     
      <!-- Nav tabs -->
   <ul class="nav nav-tabs">
     <li class="nav-item">
@@ -266,6 +259,7 @@
                 <div class="col-sm-2"><b>Subárea</b></div>
                 <div class="col-sm-2"><b>Usuario</b></div>
                 <div class="col-sm-1"><b>Descripción</b></div>
+                <div class="col-sm-1"><b>Evaluación</b></div>
             </div>
             <div class="accordion" id="Examplemenu3">
                 @foreach($reports as $row)
@@ -287,7 +281,10 @@
                                         <a href=""   class="collapsed" data-toggle="collapse" data-target="#collapse{{ $row->id }}" aria-expanded="false" aria-controls="collapse{{ $row->id }}">
                                             Ver <i class="fa fa-plus"></i>
                                         </a>
-                                    </div>      
+                                    </div> 
+                                    <div class="col-sm-1">
+                                            @include('help.otros.evaluar2')
+                                    </div>     
                                 </div>   
                             </div>
                             <div id="collapse{{ $row->id }}" class="collapse" aria-labelledby="heading{{ $row->id }}" data-parent="#Examplemenu3">

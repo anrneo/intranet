@@ -23,23 +23,24 @@
        <b>Fecha de asignación: </b>{{ $row->f_asignado }} <br>
     @endif
     @php
-       
-        $sql = "SELECT docu, f_docu FROM docu_help_desks where help_id=$row->id";
-        $result = $conn->query($sql);
-        
-
-        if ($result->num_rows > 0) {
-            $dat=$result->fetch_all();
-            echo " <b>Documentación: </b><br>" ;
-            foreach ($dat as $key => $value) {
-                $num=$key+1;
-                echo " <b>Nota".$num.": </b>" . $value[0]."<br>";
-                echo " <b>Fecha de Nota".$num.": </b>" . $value[1]."<br>";
+        $id=0;
+        $num=0;
+        foreach ($docu as $key => $value) {
+            if ($row->id==$value->help_id) {
+                $num++;
             }
-        
         }
     @endphp
-   
+     @if ($num>0)
+     <b>Documentación: </b><br>
+        @foreach ($docu as $doc)
+            @if ($row->id==$doc->help_id)
+                @php $id++;  @endphp
+                <b>Nota{{$id}}: </b>{{$doc->docu}}<br>
+                <b>Fecha de Nota{{$id}}: </b>{{$doc->f_docu}}<br>
+            @endif
+        @endforeach
+    @endif
 
     @if ($row->respuesta!=null)
         <b>Respuesta: </b>{{ $row->respuesta }} <br>

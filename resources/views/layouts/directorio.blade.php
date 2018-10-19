@@ -15,7 +15,7 @@
       if ($conn->connect_error) {
           die("Connection failed: " . $conn->connect_error);
       } 
-      $sql0 = "SELECT id, cedula, name, email, cargo, sede FROM users order by name";
+      $sql0 = "SELECT id, cedula, name, email, cargo, sede, cumple FROM users order by name";
      
       $result0 = $conn->query($sql0);
       $arr1=$result0->fetch_all();
@@ -63,6 +63,7 @@
                                 <th class="text-center" style="width:250px; margin-bottom:12px">Correo</th>
                                 <th class="text-center" style="width:400px; margin-bottom:12px">Cargo</th>
                                 <th class="text-center" style="width:170px; margin-bottom:12px">sede</th>
+                                <th class="text-center" style="width:170px; margin-bottom:12px">cumple</th>
                             </tr>
                         </thead>
                         <tbody class="buscar text-center">
@@ -76,6 +77,7 @@
                                 <td style="width:170px">'.$row[3].'</td>
                                 <td style="width:170px">'.$row[4].'</td>
                                 <td style="width:170px">'.$row[5].'</td>
+                                <td style="width:170px">'.$row[6].'</td>
                             <tr>';
                             }
                          @endphp

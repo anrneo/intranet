@@ -20,7 +20,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/datajax', 'HomeController@datajax');
 
-Route::post('/datajax1', 'HomeController@datajax1');
+
 
 Route::post('/consultahd', 'HelpController@consultahd');
+
+Route::post('/buscaridhd', 'HelpController@buscaridhd');
+
+Route::post('/validaremail', 'HomeController@validaremail');
+Route::post('/validarid', 'HomeController@validarid');
 
