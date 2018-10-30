@@ -17,15 +17,18 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/cc', 'TiqueteController@cc');
 
 Route::get('/datajax', 'HomeController@datajax');
 
 
-
 Route::post('/consultahd', 'HelpController@consultahd');
+Route::post('/consubareahd', 'HelpController@consubareahd');
 
 Route::post('/buscaridhd', 'HelpController@buscaridhd');
 
 Route::post('/validaremail', 'HomeController@validaremail');
 Route::post('/validarid', 'HomeController@validarid');
+
+Route::post('/likevideo', 'HomeController@likevideo');
 

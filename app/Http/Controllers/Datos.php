@@ -139,6 +139,15 @@ class Datos extends Controller
             "3B" => 'Compras',
             "3C" => 'Mensajeria',
             "4A" => 'PQRSF Empleado',
+            "5A" => 'Riesgo operativo en salud (misional)',
+            "5B" => 'Riesgo financiero',
+            "5C" => 'Riesgo legal y regulatorio',
+            "5D" => 'Riesgo reputacional',
+            "5E" => 'Riesgo de corrupción',
+            "5F" => 'Riesgo operacional',
+            "5G" => 'Riesgo cumplimiento',
+            "5H" => 'Riesgo de seguridad de la información',
+            "5I" => 'Riesgo Ambientales y Salud Ocupacional',
             );  
 
             return $datosubarea[$i];
@@ -215,6 +224,15 @@ class Datos extends Controller
         309=>array('n' => 'Papeleria','t'=>72),
         "3C" => 72,
         "4A" => 72,
+        "5A"=> 24,
+        "5B"=> 24,
+        "5C"=> 24,
+        "5D"=> 24,
+        "5E"=> 24,
+        "5F"=> 24,
+        "5G"=> 24,
+        "5H"=> 24,
+        "5I"=> 24,
             
             );  
 
@@ -242,6 +260,7 @@ class Datos extends Controller
         paula del castillo = 365
         jesica durango = 149
         Luisa Giraldo = 476
+        carlos vasco = 572
           */
         $asignacion=array(
              'Redes e Internet'=>array(0=>array('id'=>351, 'nombre'=>'Sistemas La 80'),//Jonathan Cobaleda Cabrera
@@ -463,6 +482,15 @@ class Datos extends Controller
                                 3=>array('id'=>502, 'nombre'=>'Laura Vasquez'),
                                 4=>array('id'=>275, 'nombre'=>'Derlys Sofia Suarez Guerra'),
                                 5=>array('id'=>430, 'nombre'=>'Fernando Padron')),
+            'Riesgo operativo en salud (misional)'=>array(0=>array('id'=>572, 'nombre'=>'Carlos Vasco')),
+            'Riesgo financiero'=>array(0=>array('id'=>572, 'nombre'=>'Carlos Vasco')),
+            'Riesgo legal y regulatorio'=>array(0=>array('id'=>572, 'nombre'=>'Carlos Vasco')),
+            'Riesgo reputacional'=>array(0=>array('id'=>572, 'nombre'=>'Carlos Vasco')),
+            'Riesgo de corrupción'=>array(0=>array('id'=>572, 'nombre'=>'Carlos Vasco')),
+            'Riesgo operacional'=>array(0=>array('id'=>572, 'nombre'=>'Carlos Vasco')),
+            'Riesgo cumplimiento'=>array(0=>array('id'=>572, 'nombre'=>'Carlos Vasco')),
+            'Riesgo de seguridad de la información'=>array(0=>array('id'=>572, 'nombre'=>'Carlos Vasco')),
+            'Riesgo Ambientales y Salud Ocupacional'=>array(0=>array('id'=>572, 'nombre'=>'Carlos Vasco')),
             );  
 
             return $asignacion;
@@ -478,7 +506,8 @@ class Datos extends Controller
             500 => 'Sistemas',
             2 => 'Sistemas',
             475 => 'Gestión Humana',
-            505 => 'Gerencia'
+            505 => 'Gerencia',
+            572 => 'Generación de Riesgo',
 
             );  
 

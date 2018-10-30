@@ -175,7 +175,6 @@
     @endif
     
  
-    {!! Html::script('/js/jquery.min.js') !!}
 
     <script>
        

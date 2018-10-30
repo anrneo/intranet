@@ -8,7 +8,8 @@
 
         <!-- Favicon -->
         <link rel="shortcut icon" href="/img/sumi/favicon.png">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">        <!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">       <!-- Bootstrap CSS -->
 <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">       
 {!! Html::style('/css/bootstrap.min.css') !!}        
         <!-- Font Awesome CSS -->
@@ -220,11 +221,27 @@
                         <a href="#"><i class="fa fa-comments"></i> <span> PQRS-F </span> <span class="menu-arrow"></span></a>
                             <ul class="list-unstyled">
                                 <li><a href="https://redvitalut.com/pqrsf/buzon.php" target="_blank"><i class="fa fa-bullhorn"></i><span> Crear Pqrsf </span></a></li>
+                                <li><a href="https://pqrd.supersalud.gov.co/TMS.Solution.TMSPQRD" target="_blank"><i class="fa fa-check"></i><span>Pqrs Supersalud</span></a></li>
                                 <li><a href="/adminpqrsf" target="_blank"><i class="fa fa-line-chart"></i><span> Admin PQRSF</span></a></li>
                                 <li><a href="/videopqrsf"><i class="fa fa-youtube-play"></i><span>Video Tutorial</span></a></li>
                                 @if(Auth::check())
                                 <li><a href="/intrapqr/index.php?id={{ Auth::user()->id }}" target="_blank"><i class="fa fa-line-chart"></i><span> Local</span></a></li>
                                 @endif
+                            </ul>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><i class="fab fa-telegram-plane"></i> <span>Traslados</span> <span class="menu-arrow"></span></a>
+                            <ul class="list-unstyled">
+                                <li><a href="/reportartiq" ><i class="fas fa-map-marker-alt"></i><span>Reportar</span></a></li>
+                                <li class="submenu">
+                                        <a href="#"><i class="fas fa-business-time"></i> <span>Solicitudes</span> <span class="menu-arrow"></span></a>
+                                        <ul class="list-unstyled">
+                                                <li><a href="/solicitudestiq"><i class="fas fa-plane-departure"></i><span>Aéreos</span></a></li>
+                                                <li><a href="/solicitudesterr"><i class="fas fa-bus"></i><span>Terrestres</span></a></li>
+                                               
+                                        </ul>
+                                    </li>           
+                               
                             </ul>
                     </li>
                    

@@ -407,12 +407,27 @@
          <!-- filtros -->
         <div id="menu6" class="container tab-pane active col-sm-12">
             @if(count($consulta)>0)
-            Por favor selecciona para ver las asignaciones en tu área
-                <select class="custom-select custom-select-sm" id="consulta">
-                    @foreach ($consulta as $item)
-                        <option value="{{$item->nombre_asig}}">{{$item->nombre_asig}} ({{$item->cant}})</option>
-                    @endforeach
-                </select>
+                <div class="row">
+                <div class="col-sm-6">
+                        Por favor selecciona para filtar por analista
+                    <select class="custom-select custom-select-sm" id="consulta">
+                        @foreach ($consulta as $item)
+                            <option value="{{$item->nombre_asig}}">{{$item->nombre_asig}} ({{$item->cant}})</option>
+                        @endforeach
+                    </select>
+
+                </div>
+                <div class="col-sm-6">
+                        Por favor selecciona para filtar por subarea
+                    <select class="custom-select custom-select-sm" id="subarea">
+                        @foreach ($consub as $sub)
+                        <option value="{{$sub->subarea}}">{{$sub->subarea}} ({{$sub->cant}})</option>
+
+                        @endforeach
+                    </select>
+
+                </div>
+            </div>
                 <br><br>
                 <div class="row text-center" style="margin:0 8px 8px 8px">
                         <div class="col-sm-1"><b>Id</b></div>
@@ -421,6 +436,7 @@
                         <div class="col-sm-2"><b>Usuario</b></div>
                         <div class="col-sm-1"><b>Tipo</b></div>
                         <div class="col-sm-2"><b>Subárea</b></div>
+                        <div class="col-sm-2"><b>Asigando a</b></div>
                         <div class="col-sm-1"><b>Descripción</b></div>
                         <div class="col-sm-1"><b>Opciones</b></div>
                 </div>
@@ -749,7 +765,6 @@
 <script>
 $(function(){
 
-
 $('#consulta').click(function(){
     html=''
 
@@ -770,6 +785,7 @@ $('#consulta').click(function(){
                                     <div class="col-sm-2">'+dat.nombre+'</div>\
                                     <div class="col-sm-1">'+dat.requerimiento+'</div>\
                                     <div class="col-sm-2">'+dat.subarea+'</div>\
+                                    <div class="col-sm-2">'+dat.nombre_asig+'</div>\
                                     <div class="col-sm-1"> \
                                         <a href=""   class="collapsed" data-toggle="collapse" data-target="#123collapse'+dat.id+'" aria-expanded="false" aria-controls="123collapse'+dat.id+'">\
                                             Ver <i class="fa fa-plus"></i>\
@@ -795,18 +811,76 @@ $('#consulta').click(function(){
     <p>\
             <b>Sede: </b>'+dat.sede+'<br>\
             <b >Asunto: </b>'+dat.asunto+'<br>\
+            <b>Descripción: </b>'+dat.descripcion+'<br>\
     <b >Tiempo de Solución: </b>'+dat.t_std+' hora(s)<br>\
-    <b>Fecha asignación: </b>'+dat.f_asignado+'<br>\
     <b>Prerespuesta Aprobación: </b>'+dat.res_aprobado+'<br>\
     <b>Fecha de Aprobación: </b>'+dat.f_aprobado+'<br>\
-    <b>Descripción: </b>'+dat.descripcion+'<br>\
-     </p>\
+    <b>Fecha asignación: </b>'+dat.f_asignado+'<br>\     </p>\
             </div>\
                             </div>\
                         </div>')     
             });
         });
 })
+
+$('#subarea').click(function(){
+    html=''
+
+    $.ajax({
+        method: "POST",
+        url: "api/consubareahd",
+        data: { name: $(this).val() }
+      })
+        .done(function( msg ) {
+            $('#resultconsulta').html('')
+            msg.forEach(dat => {
+                $('#resultconsulta').append('<div class="card">\
+                            <div class="card-header" id="123heading'+dat.id+'">\
+                                <div class="row text-center">\
+                                    <div class="col-sm-1">'+dat.id+'</div>\
+                                    <div class="col-sm-1" style="margin-left:0">'+dat.created_at+'</div>\
+                                    <div class="col-sm-1">'+dat.dias_sin+'</div>\
+                                    <div class="col-sm-2">'+dat.nombre+'</div>\
+                                    <div class="col-sm-1">'+dat.requerimiento+'</div>\
+                                    <div class="col-sm-2">'+dat.subarea+'</div>\
+                                    <div class="col-sm-2">'+dat.nombre_asig+'</div>\
+                                    <div class="col-sm-1"> \
+                                        <a href=""   class="collapsed" data-toggle="collapse" data-target="#123collapse'+dat.id+'" aria-expanded="false" aria-controls="123collapse'+dat.id+'">\
+                                            Ver <i class="fa fa-plus"></i>\
+                                        </a>\
+                                    </div>\
+                                    <div class="col-sm-1" style="margin:0 0 0 -20px">\
+                                            <div class="btn-group">\
+                                                <button type="button" class="btn btn-primary btn-sm">Opciones</button>\
+                                                <button type="button" class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">\
+                                                    <span class="caret"></span>\
+                                                </button>\
+                                                <div class="dropdown-menu ">\
+                                                    <a class="dropdown-item" href="" data-toggle="modal" data-target="#Modaldocu'+dat.id+'">Documentar</a>\
+                                                     <a class="dropdown-item" href="" data-toggle="modal" data-target="#Modalasignar'+dat.id+'">Reasignar</a>\
+                                                             <a class="dropdown-item" href="/responder/'+dat.id+'">Finalizar</a>\
+                                                    </div>\
+                                            </div>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                            <div id="123collapse'+dat.id+'" class="collapse" aria-labelledby="123heading'+dat.id+'" data-parent="#resultconsulta">\
+                                    <div class="card-body">\
+    <p>\
+            <b>Sede: </b>'+dat.sede+'<br>\
+            <b >Asunto: </b>'+dat.asunto+'<br>\
+            <b>Descripción: </b>'+dat.descripcion+'<br>\
+    <b >Tiempo de Solución: </b>'+dat.t_std+' hora(s)<br>\
+    <b>Prerespuesta Aprobación: </b>'+dat.res_aprobado+'<br>\
+    <b>Fecha de Aprobación: </b>'+dat.f_aprobado+'<br>\
+    <b>Fecha asignación: </b>'+dat.f_asignado+'<br>\     </p>\
+            </div>\
+                            </div>\
+                        </div>')     
+            });
+        });
+})
+
 })
 </script>
 

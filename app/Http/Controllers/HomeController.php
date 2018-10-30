@@ -113,7 +113,7 @@ class HomeController extends Controller
 
         $ced=Auth()->user()->cedula;
         $users = DB::connection('sqlsrv1')->select('SELECT * FROM certificado_emp where Identificacion ='.$ced.'');
-        
+        //dd($users);
         $letras = NumeroALetras::convertir($users[0]->SueldoBasico);
       if($users[0]->SueldoBasico%1000000==0){
         $letras .= 'DE ';
@@ -145,6 +145,24 @@ class HomeController extends Controller
       // dd($dat);
 
         return $dat;
+        
+         
+    }
+
+    public function likevideo(Request $request)
+    {
+        if ($request->id=='like') {
+            $dat=DB::select("INSERT into likevideos (likes) VALUES (1)");  
+            $cont=  DB::select("SELECT count(likes) as cant from likevideos where likes=1");
+            
+        }elseif($request->id=='dislike'){
+            $dat=DB::select("INSERT into likevideos (likes) VALUES (0)");  
+            $cont=  DB::select("SELECT count(likes) as cant from likevideos where likes=0");
+        }else{
+            $cont=  DB::select("SELECT likes, (count(likes)) as cant from likevideos group by likes having count(likes)>0 order by likes asc");
+
+        }
+        return $cont;
         
          
     }

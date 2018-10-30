@@ -134,6 +134,14 @@ class HelpController extends Controller
                             ->subject('Nuevo Requerimiento del Gestor de Solicitudes: Compras, Mantenimiento y Mensajería');
                         });
                     }
+                if($request->input('area')=='Generación de Riesgo'){
+                        $data=array('nombre'=>'Carlos','area'=>$request->input('area'), 'usuario'=>$request->input('nombre'), 'asunto'=>$request->input('asunto'),'subarea'=>$subarea);
+                        Mail::send('help.mail', $data, function($msj){
+                            $msj->to('carlos.villa@sumimedical.com')
+                            //$msj->to('carlos.vasco@sumimedical.com')
+                                ->subject('Nuevo Requerimiento del Gestor de Solicitudes: Gestión Humana');
+                            });
+                        }
         $genreport = new HelpDesk;
         $genreport -> nombre = $request->input('nombre');
         $genreport -> email = $request->input('email');
@@ -150,6 +158,29 @@ class HelpController extends Controller
         $genreport -> archivo = $path;
         $genreport -> t_std = $std;
         $genreport ->save();
+        
+        if ($subarea=='Mensajeria') {
+            $id=HelpDesk::all()->last();
+            $report = HelpDesk::find($id->id);
+            $report->estado = 1;
+            $report->asignado_a = 149;
+            $report->nombre_asig = 'Jesica Durango';
+            $report->f_asignado = now();
+            $report->save();
+
+            $comment = ([
+                'usuario' => 'Luisa Giraldo',
+                'subarea' => 'Mensajeria',
+                'user_id' => 476,
+                'post_id' => 149,
+                'accion' => 'asignar'
+            ]);
+            
+            if ($comment['user_id'] != $comment['post_id']) {
+            $user = User::find(149); 
+            $user->notify(new NotiHelpDesk($comment));
+            }
+        }
 
         $notificacion = array(
             'message' => 'Gracias! Su requerimiento se envió con exito.', 
@@ -190,7 +221,7 @@ class HelpController extends Controller
             ->where('id', $_GET['id'])
             ->update(['read_at' => now()]);            
         }
-        if(Auth()->user()->id==500 || Auth()->user()->id==2 || Auth()->user()->id==505){
+        if(Auth()->user()->id==500 || Auth()->user()->id==505){
             $reports=DB::select("SELECT *, datediff(f_respuesta, created_at) as dias, datediff(now(), created_at) as dias_sin from help_desks order by updated_at desc");
             $in=DB::table('help_desks')->where([['requerimiento', 'Incidente'],['estado', 0]])->get();
             $so=DB::table('help_desks')->where([['requerimiento', 'Solicitud'],['estado', 0]])->get();
@@ -198,7 +229,8 @@ class HelpController extends Controller
             $solu=DB::table('help_desks')->where('estado', 2)->get();
             $apro=DB::table('help_desks')->where('estado', 3)->get();
             $consulta=DB::select("SELECT nombre_asig, count(nombre_asig) as cant from help_desks where nombre_asig is not null and estado=1 group by nombre_asig having count(nombre_asig) > 0 ORDER BY count(nombre_asig) desc");
-        //dd($consulta);
+            $consub=DB::select("SELECT subarea, count(subarea) as cant from help_desks where  estado=1 group by subarea having count(subarea) > 0 ORDER BY count(subarea) desc");
+            //dd($subarea);
         }elseif(Auth()->user()->id==430){
             //$reports = DB::table('help_desks')->where('admin', Auth()->user()->id)->orderBy('updated_at', 'desc')->get();
             $user=Auth()->user()->id;
@@ -215,8 +247,20 @@ class HelpController extends Controller
             $apro=DB::table('help_desks')->where([['admin', Auth()->user()->id],['estado', 3]])
                                         ->orWhere([['admin', 501],['estado', 3]])->get();
             $consulta=DB::select("SELECT nombre_asig, count(nombre_asig) as cant from help_desks where nombre_asig is not null and estado=1 and admin=430 group by nombre_asig having count(nombre_asig) > 0 ORDER BY count(nombre_asig) desc");
-
-            }else{
+            $consub=DB::select("SELECT subarea, count(subarea) as cant from help_desks where estado=1 and admin=430 group by subarea having count(subarea) > 0 ORDER BY count(nombre_asig) desc");
+            }elseif(Auth()->user()->id==2){
+                
+                $reports=DB::table('help_desks')->where([['area', '0']])->get();
+                $in=$reports;
+            $so=$reports;
+            $asi=$reports;
+            $solu=$reports;
+            $apro=$reports;
+            $consulta=$reports;
+            $subarea=$reports;
+        
+    
+                }else{
             $user=Auth()->user()->id;
             $reports=DB::select("SELECT *, datediff(f_respuesta, created_at) as dias, datediff(now(), created_at) as dias_sin from help_desks where admin=$user order by updated_at desc");
             //dd(count($reports));
@@ -226,6 +270,7 @@ class HelpController extends Controller
             $solu=DB::table('help_desks')->where([['admin', Auth()->user()->id],['estado', 2]])->get();
             $apro=DB::table('help_desks')->where([['admin', Auth()->user()->id],['estado', 3]])->get();
             $consulta=DB::select("SELECT nombre_asig, count(nombre_asig) as cant from help_desks where nombre_asig is not null and estado=1 and admin=$user group by nombre_asig having count(nombre_asig) > 0 ORDER BY count(nombre_asig) desc");
+            $consub=DB::select("SELECT subarea, count(subarea) as cant from help_desks where estado=1 and admin=$user group by subarea having count(subarea) > 0 ORDER BY count(subarea) desc");
         }
         $docu=DocuHelpDesk::all();
         $inci=$in->count();
@@ -245,7 +290,7 @@ class HelpController extends Controller
         //dd($user);
          
         return view('help.admin', compact('reports','inci','soli','tot', 'soluci', 'asignados', 
-        'num_asig', 'rol', 'aprobado', 'categoria', 'subarea', 'consulta', 'docu'));
+        'num_asig', 'rol', 'aprobado', 'categoria', 'subarea', 'consulta', 'docu', 'consub'));
     }
 
     public function getresponder($id)
@@ -626,6 +671,17 @@ class HelpController extends Controller
         return $user;
     }
 
+    public function consubareahd(Request $request)
+    {
+        $name=$request->name;
+        $user=DB::select("SELECT *, datediff(f_respuesta, created_at) as dias, datediff(now(), created_at) as dias_sin
+         from help_desks 
+         where subarea='".$name."' and estado=1
+         order by dias_sin desc");
+        
+        return $user;
+    }
+
     public function buscaridhd(Request $request)
     {
         $id=$request->id;
@@ -650,13 +706,9 @@ class HelpController extends Controller
 
     public function test()
     {
-        $name='Carlos Villa';
-        $user=DB::select("SELECT *, datediff(now(), created_at) as dias_sin
-         from help_desks 
-         where nombre_asig='".$name."' and estado=1
-         order by dias_sin desc");
-        dd($user);
-        return $user;
+        
+        $cont=  DB::select("SELECT likes, (count(likes)) as cant from likevideos group by likes having count(likes)>0 order by likes asc");
+        dd($cont);
     }
 }
 

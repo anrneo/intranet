@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <style>
 .row-section h2{float:left; width:100%; color:#fff; margin-bottom:30px; font-size: 14px;}
 .row-section h2 span{font-family: 'Libre Baskerville', serif; display:block; font-size:45px; text-transform:none; margin-bottom:20px; margin-top:30px;font-weight:700;}
@@ -54,7 +55,10 @@
 		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
 					<div class="embed-responsive embed-responsive-16by9">
 						<iframe class="embed-responsive-item" src="https://www.youtube-nocookie.com/embed/videoseries?list=PLTn35r0MPQLfK8OhaTAIsBA9z7iaCBKJ8&amp;showinfo=0;autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-					</div>	
+					</div>
+					<span style="font-size:13px; color:#769d35">Evalúa nuestros videos: </span>
+					<a href="#"><i class="fa fa-thumbs-o-up" style="font-size:20px;"></i></a><span id="like" style="font-size:11px; color:#769d35"></span>
+					<a href="#"><i class="fa fa-thumbs-o-down" style="font-size:20px;"></i></a><span id="dislike" style="font-size:11px; color:#769d35"></span>
 			<!-- end card-->
 			<section class="row-section">
 					<div class="col-md-12  row-block">
@@ -81,7 +85,7 @@
                       <div class="media-left align-self-center">
                           <img class="rounded-circle" src="/img/tenor.gif">
                           @if ($num>0)
-                            <p><b style="color:#212529a1;padding:50px 0 0 20px;" data-toggle="tooltip" title="Felicitaciones">{{$num}} </b><i class="fa fa-birthday-cake" style="color:rgb(41, 148, 167)"></i></p>
+                            <p><b style="color:#212529a1;padding:50px 0 0 20px;" data-toggle="tooltip" data-placement="top" title="Felicitaciones">{{$num}} </b><i class="fa fa-birthday-cake" style="color:rgb(41, 148, 167)"></i></p>
                           @endif
                       </div>
                       <div class="media-body">
@@ -101,6 +105,52 @@
 			</section>					
 		</div>
 </div>
+{!! Html::script('/js/jquery.min.js') !!}
+<script>
+	$(document).ready(function(){
+			$('[data-toggle="tooltip"]').tooltip();   
+	});
+	</script>
+<script>
+   $(function(){
+		$.ajax({
+        method: "POST",
+        url: "api/likevideo",
+        data: { id: 'dathome' }
+      	})
+        .done(function( dat ) {
+					if(dat[0].likes==1){
+						$('#like').html(dat[0].cant)
+					}else{
+						$('#dislike').html(dat[0].cant)
+					$('#like').html(dat[1].cant)
+					}
+					
+					
+		 		})
 
-
+		 $('.fa-thumbs-o-up').click(function(){
+			$.ajax({
+        method: "POST",
+        url: "api/likevideo",
+        data: { id: 'like' }
+      	})
+        .done(function( dat ) {
+					$('#like').html(dat[0].cant)
+					
+		 		})
+		 })
+		 $('.fa-thumbs-o-down').click(function(){
+			$.ajax({
+        method: "POST",
+        url: "api/likevideo",
+        data: { id: 'dislike' }
+      	})
+        .done(function( dat ) {
+					$('#dislike').html(dat[0].cant)
+					
+		 		})
+		 })
+	 })
+</script>
 @endsection

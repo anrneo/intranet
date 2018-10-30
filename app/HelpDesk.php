@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class HelpDesk extends Model
 {
     use Notifiable;
+   
 }

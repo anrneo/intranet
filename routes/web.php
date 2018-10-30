@@ -38,6 +38,13 @@ Route::middleware(['auth'])->group(function() {
     //-->Ruta para cumpleaños 
     Route::get('/felicita/{id}', 'HomeController@felicita');
     Route::get('/borrarfeli/{id}', 'HomeController@borrarfeli');
+   
+   //-->Ruta para tiquetes 
+    Route::get('/reportartiq', 'TiqueteController@reportartiq');
+    Route::post('/reportartiq', 'TiqueteController@postreportartiq');
+    Route::post('/consultacc', 'TiqueteController@consultacc');
+    Route::get('/solicitudestiq', 'TiqueteController@solicitudestiq');
+    Route::get('/solicitudesterr', 'TiqueteController@solicitudesterr');
 
 
     //helpdesk

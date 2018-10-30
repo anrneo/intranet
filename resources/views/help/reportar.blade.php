@@ -54,6 +54,7 @@
             <option>Comunicaciones</option>
             <option>Gestión Humana</option>
             <option>Compras, Mantenimiento y Mensajería</option>
+            <option>Generación de Riesgo</option>
           </select>
         </div>
       </div>
@@ -478,6 +479,9 @@
             else if($('#areahd').val()=='Compras, Mantenimiento y Mensajería'){
                 $('#admin').val(476) //luisa giraldo
             }
+            else if($('#areahd').val()=='Generación de Riesgo'){
+                $('#admin').val(572) //Carlos vasco
+            }
             else if($('#subareahd').val()=='3A' || $('#subareahd').val()=='3C'){
                 $('#categoriahd').val('')
             }
@@ -522,6 +526,20 @@
                         $('#retiro').hide()
                         $('#divcategoria').hide()
                         $('#subareahd').html('<option value="4A">PQRSF Empleado</option>') 
+                    }
+                    else if($(this).val()=='Generación de Riesgo'){
+                        $('#ingreso').hide()
+                        $('#retiro').hide()
+                        $('#divcategoria').hide()
+                        $('#subareahd').html('<option value="5A">Riesgo operativo en salud (misional)</option>\
+                                                <option value="5B">Riesgo financiero</option>\
+                                                <option value="5C">Riesgo legal y regulatorio</option>\
+                                                <option value="5D">Riesgo reputacional</option>\
+                                                <option value="5E">Riesgo de corrupción</option>\
+                                                <option value="5F">Riesgo operacional</option>\
+                                                <option value="5G">Riesgo cumplimiento</option>\
+                                                <option value="5H">Riesgo de seguridad de la información</option>\
+                                                <option value="5I">Riesgo Ambientales y Salud Ocupacional</option>')
                     }
                     else{
                         $('#ingreso').hide()
