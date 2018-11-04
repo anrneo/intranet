@@ -110,6 +110,7 @@ class Datos extends Controller
             15 => 'Serv. Farmacéuticos', 
             16 => 'IPS Universitaria Prado', 
             17 => 'La Aguacatala', 
+            18 => 'Medical Complex', 
         );
         return $sedes;
     }

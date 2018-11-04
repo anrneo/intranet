@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Datos;
 use Illuminate\Support\Facades\DB;
 use App\Tiquete;
+use Mail;
 
 class TiqueteController extends Controller
 {
@@ -51,9 +52,9 @@ class TiqueteController extends Controller
 
     public function cc()
     {
-        //$users = DB::connection('sqlsrv')->select("SELECT top 1000 num_id FROM sis_paci WHERE EstadoAfiliado = 1");
+        $users = DB::connection('sqlsrv')->select("SELECT top 1000 num_id FROM sis_paci WHERE EstadoAfiliado = 1");
         //$users = DB::connection('sqlsrv')->select("SELECT * FROM sis_paci WHERE num_id = '1000100081'");
-        $users = DB::connection('sqlsrv')->select("select name from sysobjects where type='U'");
+        //$users = DB::connection('sqlsrv')->select("select name from sysobjects where type='U'");
         dd($users);
         return $users;
         /*CREATE PROC BuscaValorEnBBDD
@@ -119,6 +120,7 @@ class TiqueteController extends Controller
             $genreport = new Tiquete;
             $genreport -> nom_user = $req->input('nom_user');
             $genreport -> pa_user = $req->input('pa_user');
+            $genreport -> tipoid_user = $req->input('tipoid_user');
             $genreport -> id_user = $req->input('id_user');
             $genreport -> cel_user = $req->input('cel_user');
             $genreport -> naci_user = $req->input('naci_user');
@@ -146,15 +148,111 @@ class TiqueteController extends Controller
 
     public function solicitudestiq()
     {
-        $dat = Tiquete::where([['t_trans', 'Aéreo'],['estado', 0]])
-               ->get();
-        return view('tiquetes.solicitudesae', compact('dat'));
+        $dat = Tiquete::where('t_trans', 'Aéreo')->get();
+        $consul = DB::select("SELECT estado, count(estado) as cant from tiquetes group by estado having count(estado)>0 order by cant desc");
+        //dd($users);
+        $total=Tiquete::where('t_trans', 'Aéreo')->count();
+
+        $nuevo=Tiquete::where([['t_trans', 'Aéreo'],['estado', 0]])->count();
+        $verif=Tiquete::where([['t_trans', 'Aéreo'],['estado', 1]])
+                        ->orWhere([['t_trans', 'Aéreo'],['estado', 2]])->count();
+        $aprob=Tiquete::where([['t_trans', 'Aéreo'],['estado', 3]])
+                        ->orWhere([['t_trans', 'Aéreo'],['estado', 31]])->count();
+        $conf=Tiquete::where([['t_trans', 'Aéreo'],['estado', 4]])->count();
+        //$total=$tot-$aprob;
+        $datos=[$nuevo, $verif, $aprob, $conf, $total];
+        return view('tiquetes.solicitudesae', compact('dat', 'datos', 'consul'));
     }
 
+    public function aprobarsolae()
+    {
+        $dat = Tiquete::where('t_trans', 'Aéreo')->get();
+        $total=Tiquete::where([['t_trans', 'Aéreo'],['estado', 1]])
+                        ->orWhere([['t_trans', 'Aéreo'],['estado', 3]])
+                        ->orWhere([['t_trans', 'Aéreo'],['estado', 31]])->count();
+        $verif=Tiquete::where([['t_trans', 'Aéreo'],['estado', 1]])->count();
+        $aprob=Tiquete::where([['t_trans', 'Aéreo'],['estado', 3]])
+                        ->orWhere([['t_trans', 'Aéreo'],['estado', 31]])->count();
+        $datos=[$verif, $aprob, $total];
+
+        return view('tiquetes.aprobarsolae', compact('dat', 'datos'));
+    }
     public function solicitudesterr()
     {
         $dat = Tiquete::where([['t_trans', 'Terrestre'],['estado', 0]])
         ->get();
         return view('tiquetes.solicitudeste', compact('dat'));
     }
+
+    public function verificartiqae(Request $req)
+    {
+        $mail=$req->mail_user;
+        $name=ucwords(strtolower($req->nom_user));
+        //dd($mail[0]);
+        if ($req->estado==2) {
+            $data=array('nombre'=>$name,'city1'=>$req->ciudad1, 'dpto1'=>$req->dpto1, 'city2'=>$req->ciudad2, 
+                        'dpto2'=>$req->dpto2, 'sede'=>$req->sede, 'resp'=>$req->res_verifica);
+            Mail::send('tiquetes.mail', $data, function($msj) use ($mail){
+            $msj->to($mail)->subject('Respuesta de Solicitud de traslado Aéreo Sumimedical S.A.S.');
+            });
+        }
+        
+        $dat = Tiquete::find($req->id);
+        $dat->estado = $req->estado;
+        $dat->res_verifica = $req->res_verifica;
+        $dat->date_verifica = now();
+        $dat->save();
+
+        return back();
+    }
+
+    public function confirmartiqae(Request $req)
+    {
+        $path4 = $req->file('file_tick')->store('upload_tiquete');
+        
+        $mail=$req->mail_user;
+        $name=ucwords(strtolower($req->nom_user));
+        $file=$req->idtiq.'.pdf';
+        //dd($mail[0]);
+            $data=array('nombre'=>$name,'city1'=>$req->ciudad1, 'dpto1'=>$req->dpto1, 'city2'=>$req->ciudad2, 
+                        'dpto2'=>$req->dpto2, 'sede'=>$req->sede);
+            Mail::send('tiquetes.mail1', $data, function($msj) use ($mail, $path4, $file){
+            $msj->to($mail)->subject('Respuesta de Solicitud de traslado Aéreo Sumimedical S.A.S.')
+            ->attach('C:\xampp/htdocs/intranet/public/storage/'.$path4, [
+                'as' =>  $file,
+                'mime' => 'application/pdf',
+            ]);
+            });
+        
+        $dat = Tiquete::find($req->id);
+        $dat->estado = 4;
+        $dat->valor_confirm = $req->valor_confirm;
+        $dat->date_confirm = now();
+        $dat->idtiq = $req->idtiq;
+        $dat->reserva = $req->reserva;
+        $dat->path4 = $path4;
+        $dat->save();
+
+        return back();
+    }
+
+    public function apruebatiqae(Request $req)
+    {
+        
+        $dat = Tiquete::find($req->id);
+        $dat->estado = $req->estado;
+        $dat->res_aprueba = $req->res_aprueba;
+        $dat->date_res_aprueba = now();
+        
+        $dat->save();
+
+        return back();
+    }
+
+    public function consultatiq(Request $req)
+    {
+        return $req->estado;
+    }
+
+   
 }

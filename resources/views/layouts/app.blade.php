@@ -232,16 +232,17 @@
                     <li class="submenu">
                         <a href="#"><i class="fab fa-telegram-plane"></i> <span>Traslados</span> <span class="menu-arrow"></span></a>
                             <ul class="list-unstyled">
-                                <li><a href="/reportartiq" ><i class="fas fa-map-marker-alt"></i><span>Reportar</span></a></li>
-                                <li class="submenu">
-                                        <a href="#"><i class="fas fa-business-time"></i> <span>Solicitudes</span> <span class="menu-arrow"></span></a>
-                                        <ul class="list-unstyled">
-                                                <li><a href="/solicitudestiq"><i class="fas fa-plane-departure"></i><span>Aéreos</span></a></li>
-                                                <li><a href="/solicitudesterr"><i class="fas fa-bus"></i><span>Terrestres</span></a></li>
-                                               
-                                        </ul>
-                                    </li>           
-                               
+                                <li><a href="/reportartiq"><i class="fas fa-map-marker-alt"></i><span>Reportar</span></a></li>
+                                <li><a href="/test"><i class="fas fa-map-marker-alt"></i><span>test</span></a></li>
+                                @can('tiqa.ver')
+                                <li><a href="/solicitudestiq"><i class="fas fa-clipboard-check"></i><span>Verificación</span></a></li>
+                                @endcan
+                                @can('tiqa.apro')
+                                <li><a href="/aprobarsolae"><i class="fas fa-plane-departure"></i><span>Aprobación</span></a></li>
+                                @endcan
+                                @can('tiqt.admin')
+                                <li><a href="/solicitudesterr"><i class="fas fa-bus"></i><span>Terrestres</span></a></li>
+                                @endcan
                             </ul>
                     </li>
                    

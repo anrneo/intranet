@@ -12,7 +12,10 @@ use App\Notifications\NotiHelpDesk;
 
 class HomeController extends Controller
 {
-    
+    public function test()
+    {
+        return view('tiquetes.test');
+    }
 
     public function ajax()
     {

@@ -35,6 +35,8 @@ class CreateTiquetesTable extends Migration
             $table->string('nom_ase')->nullable();
             $table->string('id_ase')->nullable();
             $table->timestamps();
+            $table->string('res_verifica')->nullable();
+            $table->timestamp('date_verifica')->nullable();
         });
     }
 

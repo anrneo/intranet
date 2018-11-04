@@ -40,16 +40,23 @@
                   <input type="text" class="form-control form-control-sm" id="nom_user" name="nom_user" readonly>
             </div>
         </div> 
+        
         <div class="col-sm-4">
                 <div class="form-group">
                       <label for="pa_user" class="col-sm-12 col-form-label">Punto de atención</label>
                       <input type="text" class="form-control form-control-sm" id="pa_user" name="pa_user" readonly>
                 </div>
         </div> 
+        <div class="col-sm-4">
+                <div class="form-group">
+                      <label for="nom_user" class="col-sm-12 col-form-label">Correo</label>
+                      <input type="email" class="form-control form-control-sm" id="mail_user" name="mail_user" required>
+                </div>
+            </div> 
         <input type="text" id="id_user" name="id_user" hidden>
+        <input type="text" id="tipoid_user" name="tipoid_user" hidden>
         <input type="text" id="naci_user" name="naci_user" hidden>
         <input type="text" id="cel_user" name="cel_user" hidden>
-        <input type="text" id="mail_user" name="mail_user" hidden>
       <div class="col-sm-4">
         <div class="form-group">
           <label for="sede" class="col-sm-12 col-form-label">Selecciona la sede de radicación</label>
@@ -162,6 +169,8 @@
       	})
          
         .done(function( dat ) {
+            console.log(dat);
+            
             if (dat.length>0) {
                 $('#datcc').html('<i class="far fa-check-circle"></i>').css({"color":"LimeGreen"})
             $('#reportetiq').show()
@@ -171,7 +180,7 @@
             $('#id_user').val(dat[0].num_id)
             $('#naci_user').val(dat[0].fecha_naci)
             $('#cel_user').val(dat[0].celular)
-            $('#mail_user').val(dat[0].email)            
+            $('#tipoid_user').val(dat[0].tipo_id)            
             }else{
                 $('#datcc').html('<i class="far fa-times-circle"></i>').css({"color":"Red"})
                 $('#reportetiq').hide()

@@ -6,11 +6,18 @@
   <div class="row">
     <div class="col-auto"><br>
       <h6>Pqrsf Asignadas y Administración</h6>
-  <video width="800" controls>
-    <source src="videos/pqrsfadmin.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-</div>
+      <video width="800" controls>
+        <source src="videos/pqrsfadmin.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <div class="col-auto"><br>
+      <h6>Carga de pqrsf de Supersalud</h6>
+        <video width="800" controls>
+          <source src="videos/pqrsf1.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
 </div>
 </div>
 @endsection

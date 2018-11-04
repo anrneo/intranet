@@ -21,7 +21,7 @@ Route::get('/zeus1', function(){
 
 Route::get('/ajax', 'HomeController@ajax');
 
-
+Route::get('/test', 'HomeController@test');
 Auth::routes();
 
 //certificado laboral
@@ -45,6 +45,12 @@ Route::middleware(['auth'])->group(function() {
     Route::post('/consultacc', 'TiqueteController@consultacc');
     Route::get('/solicitudestiq', 'TiqueteController@solicitudestiq');
     Route::get('/solicitudesterr', 'TiqueteController@solicitudesterr');
+    Route::post('/verificartiqae', 'TiqueteController@verificartiqae');
+    Route::post('/confirmartiqae', 'TiqueteController@confirmartiqae');
+    Route::post('/apruebatiqae', 'TiqueteController@apruebatiqae');
+    Route::get('/aprobarsolae', 'TiqueteController@aprobarsolae');
+    Route::post('/consultatiq', 'TiqueteController@consultatiq');
+    
 
 
     //helpdesk

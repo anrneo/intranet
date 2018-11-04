@@ -443,7 +443,7 @@ class HelpController extends Controller
         $report->subarea = $request->input('subarea');
         if($request->input('aprobado')=='No Aprobado'){
             $report->estado = 2;
-            $report->respuesta = 'No Aprbado :'.$request->input('res_aprobado');
+            $report->respuesta = 'No Aprobado :'.$request->input('res_aprobado');
             $report->f_respuesta = now();
         }else{
             $report->estado = 3;

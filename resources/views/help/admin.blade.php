@@ -563,6 +563,9 @@
                                 <select class="form-control" name="aprobado">
                                         <option>Aprobado</option>
                                         <option>Aprobado Parcialmente</option>
+                                        @if ($row->subarea=='Compras')
+                                        <option>Aprobado por Comité</option>
+                                        @endif
                                         <option>No Aprobado</option>
                                 </select>
                         </div>
